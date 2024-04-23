@@ -6,10 +6,10 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <div class="page-pretitle">
-                        Karyawan
+                        Departemen
                     </div>
                     <h2 class="page-title">
-                        Data Karyawan
+                        Data Departemen
                     </h2>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <a href="#" class="btn btn-primary" id="btnTambahKaryawan">
+                                    <a href="#" class="btn btn-primary" id="btnTambahDepartemen">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -54,26 +54,13 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-12">
-                                    <form action="{{ url('/karyawan') }}" method="GET">
+                                    <form action="{{ url('/departemen') }}" method="GET">
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-10">
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="nama_karyawan"
-                                                        name="nama_karyawan" placeholder="Cari Karyawan"
-                                                        value="{{ Request('nama_karyawan') }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <select name="kode_dept" id="kode_dept" class="form-select">
-                                                        <option value="">Departemen</option>
-                                                        @foreach ($departemen as $item)
-                                                            <option
-                                                                {{ Request('kode_dept') == $item->kode_dept ? 'selected' : '' }}
-                                                                value="{{ $item->kode_dept }}">{{ $item->nama_dept }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
+                                                    <input type="text" class="form-control" id="nama_dept"
+                                                        name="nama_dept" placeholder="Cari Departemen"
+                                                        value="{{ Request('nama_dept') }}">
                                                 </div>
                                             </div>
                                             <div class="col-2">
@@ -102,39 +89,22 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>NIK</th>
-                                                <th>Nama</th>
-                                                <th>Jabatan</th>
-                                                <th>No. HP</th>
-                                                <th>Foto</th>
-                                                <th>Departemen</th>
+                                                <th>Kode Departemen</th>
+                                                <th>Nama Departemen</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($karyawan as $karyawans)
-                                                @php
-                                                    $path = Storage::url('upload/karyawan/' . $karyawans->foto);
-                                                @endphp
+                                            @foreach ($departemen as $item)
                                                 <tr>
-                                                    <td>{{ $loop->iteration + $karyawan->firstItem() - 1 }}</td>
-                                                    <td>{{ $karyawans->nik }}</td>
-                                                    <td>{{ $karyawans->nama_lengkap }}</td>
-                                                    <td>{{ $karyawans->jabatan }}</td>
-                                                    <td>{{ $karyawans->no_hp }}</td>
+                                                    <td>{{ $loop->iteration}}</td>
+                                                    <td>{{ $item->kode_dept }}</td>
+                                                    <td>{{ $item->nama_dept }}</td>
                                                     <td>
-                                                        @if (empty($karyawans->foto))
-                                                            <img src="{{ asset('assets/img/avatar.png') }}" class="avatar"
-                                                                alt="no-photo">
-                                                        @else
-                                                            <img src="{{ url($path) }}" alt="avatar" class="avatar">
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $karyawans->nama_dept }}</td>
-                                                    <td>
+                                                        <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="edit btn btn-info btn-sm"
-                                                                nik="{{ $karyawans->nik }}">
+                                                                kode_dept="{{ $item->kode_dept }}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
@@ -149,7 +119,7 @@
                                                                 </svg>
                                                             </a>
                                                             <form
-                                                                action="{{ url('/karyawan/' . $karyawans->nik . '/delete') }}" method="POST"
+                                                                action="{{ url('/departemen/' . $item->kode_dept . '/delete') }}" method="POST"
                                                                 style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">
@@ -171,10 +141,10 @@
                                                             </form>
                                                         </div>
                                                     </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    {{ $karyawan->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>
@@ -185,16 +155,15 @@
     </div>
 
     {{-- Modal Add Data --}}
-    <div class="modal modal-blur fade" id="modal-addKaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-addDepartemen" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Karyawan</h5>
+                    <h5 class="modal-title">Tambah Data Departemen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('/karyawan/store') }}" method="POST" id="form-addKaryawan"
-                        enctype="multipart/form-data">
+                    <form action="{{ url('/departemen/store') }}" method="POST" id="form-addDepartemen">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -214,8 +183,8 @@
                                             <path d="M14 16h2" />
                                             <path d="M14 12h4" />
                                         </svg> </span>
-                                    <input type="number" value="" id="nik" class="form-control"
-                                        name="nik"placeholder="Nik">
+                                    <input type="text" value="" id="kode_dept" class="form-control"
+                                        name="kode_dept" placeholder="Kode Dept">
                                 </div>
                             </div>
                         </div>
@@ -231,69 +200,9 @@
                                             <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
                                             <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                                         </svg> </span>
-                                    <input type="text" value="" id="nama_lengkap" class="form-control"
-                                        name="nama_lengkap" placeholder="Nama Lengkap">
+                                    <input type="text" value="" id="nama_dept" class="form-control"
+                                        name="nama_dept" placeholder="Nama Departemen">
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-analytics">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path
-                                                d="M3 4m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z" />
-                                            <path d="M7 20l10 0" />
-                                            <path d="M9 16l0 4" />
-                                            <path d="M15 16l0 4" />
-                                            <path d="M8 12l3 -3l2 2l3 -3" />
-                                        </svg></span>
-                                    <input type="text" value="" id="jabatan" class="form-control"
-                                        name="jabatan" placeholder="Jabatan">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path
-                                                d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" />
-                                            <path d="M11 4h2" />
-                                            <path d="M12 17v.01" />
-                                        </svg></span>
-                                    <input type="number" value="" id="no_hp" class="form-control"
-                                        name="no_hp" placeholder="No Handphone">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-label">Photo</div>
-                                <input type="file" name="foto" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-12">
-                                <select name="kode_dept" id="kode_dept" class="form-select">
-                                    <option value="">Departemen</option>
-                                    @foreach ($departemen as $item)
-                                        <option {{ Request('kode_dept') == $item->kode_dept ? 'selected' : '' }}
-                                            value="{{ $item->kode_dept }}">{{ $item->nama_dept }}
-                                        </option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -321,11 +230,11 @@
     </div>
 
     {{-- Modal Edit Data --}}
-    <div class="modal modal-blur fade" id="modal-editKaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-editDepartemen" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Data Karyawan</h5>
+                    <h5 class="modal-title">Edit Data Departemen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="loadEditForm">
@@ -339,24 +248,24 @@
 @push('myscript')
     <script>
         $(function() {
-            $('#btnTambahKaryawan').on('click', function() {
-                $('#modal-addKaryawan').modal('show');
+            $('#btnTambahDepartemen').on('click', function() {
+                $('#modal-addDepartemen').modal('show');
             })
             $('.edit').on('click', function() {
-                let nik = $(this).attr('nik');
+                let kode_dept = $(this).attr('kode_dept');
                 $.ajax({
                     type: "POST",
-                    url: "/karyawan/edit",
+                    url: "/departemen/edit",
                     cache: false,
                     data: {
                         _token: "{{ csrf_token() }}",
-                        nik: nik
+                        kode_dept: kode_dept
                     },
                     success: function(respond) {
                         $('#loadEditForm').html(respond);
                     }
                 })
-                $('#modal-editKaryawan').modal('show');
+                $('#modal-editDepartemen').modal('show');
             })
 
             $('.delete-confirm').on('click', function(e) {
@@ -381,12 +290,12 @@
                     }
                 });
             })
-            $('#form-addKaryawan').on('submit', function(e) {
+            $('#form-addDepartemen').on('submit', function(e) {
                 let nik = $("#nik").val();
                 let nama_lengkap = $("#nama_lengkap").val();
                 let jabatan = $("#jabatan").val();
                 let no_hp = $("#no_hp").val();
-                let kode_dept = $("#form-addKaryawan").find("#kode_dept").val();
+                let kode_dept = $("#form-addDepartemen").find("#kode_dept").val();
                 if (nik == "") {
                     // alert('Nik harus diisi');
                     Swal.fire({
