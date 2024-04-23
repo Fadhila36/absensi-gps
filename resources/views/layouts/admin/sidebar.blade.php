@@ -255,8 +255,13 @@
                             <div class="dropdown-menu">
                                 <div class="dropdown-menu-columns">
                                     <div class="dropdown-menu-column">
-                                        <a class="dropdown-item" href="{{ url('karyawan') }}">
-                                            Data Karyawan
+                                        <a class="dropdown-item" href="{{ url('karyawan') }} ">
+                                            Karyawan
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-menu-column">
+                                        <a class="dropdown-item" href="{{ url('departemen') }}">
+                                            Departemen
                                         </a>
                                     </div>
                                 </div>
