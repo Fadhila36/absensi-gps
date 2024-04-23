@@ -18,7 +18,7 @@
     <div class="div page-body">
         <div class="container-xl">
             <div class="row">
-                <div class="col-12">Search & Pagination Data Karyawan
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -131,6 +131,47 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $karyawans->nama_dept }}</td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <a href="#" class="edit btn btn-info btn-sm"
+                                                                nik="{{ $karyawans->nik }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path
+                                                                        d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                                    <path
+                                                                        d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                                    <path d="M16 5l3 3" />
+                                                                </svg>
+                                                            </a>
+                                                            <form
+                                                                action="{{ url('/karyawan/' . $karyawans->nik . '/delete') }}" method="POST"
+                                                                style="margin-left: 5px">
+                                                                @csrf
+                                                                <a class="btn btn-danger btn-sm delete-confirm">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
+                                                                        <path stroke="none" d="M0 0h24v24H0z"
+                                                                            fill="none" />
+                                                                        <path d="M4 7h16" />
+                                                                        <path
+                                                                            d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                        <path
+                                                                            d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                                        <path d="M10 12l4 4m0 -4l-4 4" />
+                                                                    </svg>
+                                                                </a>
+                                                            </form>
+                                                        </div>
+
+                                                    </td>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -144,6 +185,7 @@
         </div>
     </div>
 
+    {{-- Modal Add Data --}}
     <div class="modal modal-blur fade" id="modal-addKaryawan" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -278,6 +320,21 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Edit Data --}}
+    <div class="modal modal-blur fade" id="modal-editKaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Data Karyawan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="loadEditForm">
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('myscript')
@@ -286,7 +343,45 @@
             $('#btnTambahKaryawan').on('click', function() {
                 $('#modal-addKaryawan').modal('show');
             })
+            $('.edit').on('click', function() {
+                let nik = $(this).attr('nik');
+                $.ajax({
+                    type: "POST",
+                    url: "/karyawan/edit",
+                    cache: false,
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        nik: nik
+                    },
+                    success: function(respond) {
+                        $('#loadEditForm').html(respond);
+                    }
+                })
+                $('#modal-editKaryawan').modal('show');
+            })
 
+            $('.delete-confirm').on('click', function(e) {
+                let form = $(this).closest('form');
+                e.preventDefault();
+                Swal.fire({
+                    title: "Apakan anda yakin?",
+                    text: "Data yang di hapus tidak dapat dikembalikan!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Ya, hapus!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Data anda telah di hapus.",
+                            icon: "success"
+                        });
+                    }
+                });
+            })
             $('#form-addKaryawan').on('submit', function(e) {
                 let nik = $("#nik").val();
                 let nama_lengkap = $("#nama_lengkap").val();
