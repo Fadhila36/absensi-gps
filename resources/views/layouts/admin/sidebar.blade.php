@@ -260,7 +260,7 @@
                      </div>
                  </li>
                  <li class="nav-item">
-                     <a class="nav-link" href="{{ url('monitoring/presensi') }}">
+                     <a class="nav-link" href="{{ url('presensi/monitoring') }}">
                          <span
                              class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -305,7 +305,7 @@
                      <div class="dropdown-menu">
                          <div class="dropdown-menu-columns">
                              <div class="dropdown-menu-column">
-                                 <a class="dropdown-item" href="{{ url('laporan/presensi') }} ">
+                                 <a class="dropdown-item" href="{{ url('presensi/laporan') }} ">
                                      Presensi
                                  </a>
                              </div>

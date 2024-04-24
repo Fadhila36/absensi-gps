@@ -1,4 +1,4 @@
- <form action="{{ url('/departemen/' . $departemen->kode_dept . '/update') }}" method="POST" id="form-addDepartemen">
+ <form action="{{ url('/departemen/update/' . $departemen->kode_dept) }}" method="POST" id="form-addDepartemen">
      @csrf
      <div class="row">
          <div class="col-12">
@@ -15,8 +15,8 @@
                          <path d="M14 16h2" />
                          <path d="M14 12h4" />
                      </svg> </span>
-                 <input type="text" value="{{ $departemen->kode_dept }}" id="kode_dept" class="form-control" name="kode_dept"
-                     placeholder="Kode Dept" disabled>
+                 <input type="text" value="{{ $departemen->kode_dept }}" id="kode_dept" class="form-control"
+                     name="kode_dept" placeholder="Kode Dept" disabled>
              </div>
          </div>
      </div>
@@ -32,8 +32,8 @@
                          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
                          <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                      </svg> </span>
-                 <input type="text" value="{{ $departemen->nama_dept }}" id="nama_dept" class="form-control" name="nama_dept"
-                     placeholder="Nama Departemen">
+                 <input type="text" value="{{ $departemen->nama_dept }}" id="nama_dept" class="form-control"
+                     name="nama_dept" placeholder="Nama Departemen">
              </div>
          </div>
      </div>

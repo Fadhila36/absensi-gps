@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <form action="{{ url('/presensi/' . $karyawan->nik . '/updateprofile') }}" method="POST" enctype="multipart/form-data"
+    <form action="{{ url('/profile/update/' . $karyawan->nik) }}" method="POST" enctype="multipart/form-data"
         style="margin-top: 4rem">
         @csrf
         <div class="col">

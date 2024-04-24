@@ -148,9 +148,8 @@
                                                                     <path d="M16 5l3 3" />
                                                                 </svg>
                                                             </a>
-                                                            <form
-                                                                action="{{ url('/karyawan/' . $karyawans->nik . '/delete') }}" method="POST"
-                                                                style="margin-left: 5px">
+                                                            <form action="{{ url('/karyawan/delete/' . $karyawans->nik) }}"
+                                                                method="POST" style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
