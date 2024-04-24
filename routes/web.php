@@ -70,5 +70,7 @@ Route::middleware('auth:user')->group(function () {
         Route::post('/showmap', [PresensiController::class, 'showMap']);
         Route::get('/laporan', [PresensiController::class, 'laporan']);
         Route::post('/laporan/cetak', [PresensiController::class, 'cetakLaporan']);
+        Route::get('/rekap', [PresensiController::class, 'rekap']);
+        Route::post('/rekap/cetak', [PresensiController::class, 'cetakRekap']);
     });
 });

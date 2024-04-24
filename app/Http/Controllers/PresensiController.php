@@ -233,11 +233,11 @@ class PresensiController extends Controller
     {
         $tanggal = $request->tanggal;
         $presensi = DB::table('presensi')
-        ->select('presensi.*', 'nama_lengkap', 'nama_dept')
-        ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
-        ->join('departement', 'karyawan.kode_dept', '=', 'departement.kode_dept')
-        ->where('tgl_presensi', $tanggal)
-        ->get();
+            ->select('presensi.*', 'nama_lengkap', 'nama_dept')
+            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+            ->join('departement', 'karyawan.kode_dept', '=', 'departement.kode_dept')
+            ->where('tgl_presensi', $tanggal)
+            ->get();
 
         return view('presensi.getpresensi', compact('presensi'));
     }
@@ -246,8 +246,8 @@ class PresensiController extends Controller
     {
         $id = $request->id;
         $presensi = DB::table('presensi')->where('id', $id)
-        ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
-        ->first();
+            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+            ->first();
         return view('presensi.showmap', compact('presensi'));
     }
 
@@ -265,15 +265,43 @@ class PresensiController extends Controller
         $tahun = $request->tahun;
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $karyawan = DB::table('karyawan')->where('nik', $nik)
-        ->join('departement', 'karyawan.kode_dept', '=', 'departement.kode_dept')
-        ->first();
+            ->join('departement', 'karyawan.kode_dept', '=', 'departement.kode_dept')
+            ->first();
 
         $presensi = DB::table('presensi')
-        ->where('nik', $nik)
-        ->whereRaw('MONTH(tgl_presensi)="' . $bulan . '"')
-        ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
-        ->orderBy('tgl_presensi')
-        ->get();
+            ->where('nik', $nik)
+            ->whereRaw('MONTH(tgl_presensi)="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
+            ->orderBy('tgl_presensi')
+            ->get();
         return view('presensi.cetaklaporan', compact('namaBulan', 'bulan', 'tahun', 'karyawan', 'presensi'));
+    }
+
+    public function rekap()
+    {
+        $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        return view('presensi.rekap', compact('namaBulan'));
+    }
+
+    public function cetakRekap(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $rekap = DB::table('presensi')
+            ->selectRaw('presensi.nik, 
+            karyawan.nama_lengkap')
+            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+            ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
+            ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
+            ->groupByRaw('presensi.nik, nama_lengkap');
+
+        // Dynamically add columns for each day of the month
+        for ($day = 1; $day <= 31; $day++) {
+            $rekap->selectRaw('MAX(CASE WHEN DAY(presensi.tgl_presensi) = ? THEN CONCAT(presensi.jam_in, "-", IFNULL(presensi.jam_out, "00:00:00")) ELSE "" END) AS tgl_' . $day, [$day]);
+        }
+
+        $rekap = $rekap->get();
+        return view('presensi.cetakrekap', compact('rekap', 'bulan', 'tahun', 'namaBulan'));
     }
 }
