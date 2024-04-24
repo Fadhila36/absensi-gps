@@ -111,7 +111,6 @@
         .signature p {
             margin: 0;
             border-top: 1px solid #000;
-            /* Tambah garis di atas tanda tangan */
             padding-bottom: 5px;
             /* Tambah ruang di bawah tanda tangan */
             display: inline-block;
