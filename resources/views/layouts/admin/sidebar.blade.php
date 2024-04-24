@@ -310,7 +310,7 @@
                                  </a>
                              </div>
                              <div class="dropdown-menu-column">
-                                 <a class="dropdown-item" href="{{ url('departemen') }}">
+                                 <a class="dropdown-item" href="{{ url('presensi/rekap') }}">
                                      Rekap Presensi
                                  </a>
                              </div>
