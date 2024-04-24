@@ -70,7 +70,7 @@
             let id = $(this).attr('id');
             $.ajax({
                 type: "POST",
-                url: "/showmap",
+                url: "/presensi/showmap",
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: id

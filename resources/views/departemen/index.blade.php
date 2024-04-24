@@ -119,7 +119,7 @@
                                                                 </svg>
                                                             </a>
                                                             <form
-                                                                action="{{ url('/departemen/' . $item->kode_dept . '/delete') }}" method="POST"
+                                                                action="{{ url('/departemen/delete/' . $item->kode_dept) }}" method="POST"
                                                                 style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">

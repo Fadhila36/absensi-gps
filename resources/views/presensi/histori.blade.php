@@ -67,7 +67,7 @@
                 var tahun = $('#tahun').val();
                 $.ajax({
                     type:'POST',
-                    url:'/gethistori',
+                    url:'/presensi/histori',
                     data:{
                         _token:'{{ csrf_token() }}',
                         bulan:bulan,

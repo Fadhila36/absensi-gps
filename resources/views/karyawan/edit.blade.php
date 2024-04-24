@@ -1,4 +1,4 @@
-<form action="{{ url('/karyawan/' . $karyawan->nik . '/update') }}" method="POST" id="form-addKaryawan"
+<form action="{{ url('/karyawan/update/' . $karyawan->nik) }}" method="POST" id="form-addKaryawan"
     enctype="multipart/form-data">
     @csrf
     <div class="row">
