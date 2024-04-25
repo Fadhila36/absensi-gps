@@ -306,4 +306,47 @@ class PresensiController extends Controller
         $rekap = $rekap->get();
         return view('presensi.cetakrekap', compact('rekap', 'bulan', 'tahun', 'namaBulan'));
     }
+
+    public function izinSakit()
+    {
+        $izinSakit = DB::table('pengajuan_izin')
+            ->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik')
+            ->orderBy('tgl_izin', 'desc')
+            ->get();
+        return view('presensi.izin-sakit', compact('izinSakit'));
+    }
+
+    public function approveIzinSakit(Request $request)
+    {
+        $status_approved = $request->status_approved;
+        $izinSakitId = $request->izinSakitId;
+        $update = DB::table('pengajuan_izin')
+            ->where('id', $izinSakitId)
+            ->update(
+                [
+                    'status_approved' => $status_approved
+                ]
+            );
+        if ($update) {
+            return Redirect::back()->with('success', 'Data Berhasil Diinput');
+        } else {
+            return Redirect::back()->with('error', 'Data Gagal Diinput');
+        }
+    }
+
+    public function batalkanIzinSakit($id)
+    {
+        $update = DB::table('pengajuan_izin')
+            ->where('id', $id)
+            ->update(
+                [
+                    'status_approved' => 0
+                ]
+            );
+        if ($update) {
+            return Redirect::back()->with('success', 'Data Berhasil Diinput');
+        } else {
+            return Redirect::back()->with('error', 'Data Gagal Diinput');
+        }
+    }
 }

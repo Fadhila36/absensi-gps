@@ -73,6 +73,9 @@ Route::middleware('auth:user')->group(function () {
         Route::post('/laporan/cetak', [PresensiController::class, 'cetakLaporan']);
         Route::get('/rekap', [PresensiController::class, 'rekap']);
         Route::post('/rekap/cetak', [PresensiController::class, 'cetakRekap']);
+        Route::get('/izin-sakit', [PresensiController::class, 'izinSakit']);
+        Route::post('/izin-sakit/approve', [PresensiController::class, 'approveIzinSakit']);
+        Route::get('/izin-sakit/cancel/{id}', [PresensiController::class, 'batalkanIzinSakit']);
     });
 
     Route::prefix('/setting')->group(function () {
