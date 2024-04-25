@@ -89,16 +89,21 @@
             var map = L.map('map', {
                 attributionControl: false
             }).setView([position.coords.latitude, position.coords.longitude], 18);
+            let lokasiKantor = "{{ $lok_kantor->lokasi_kantor }}";
+            let lok = lokasiKantor.split(",");
+            let latitude = lok[0];
+            let longitude = lok[1];
+            let radius = "{{ $lok_kantor->radius }}";
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.inditara.com">PT. Intelek Digital Nusantara</a>'
             }).addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-            var circle = L.circle([-6.3650752481413315, 107.34753819793875], {
+            var circle = L.circle([latitude, longitude], {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,
-                radius: 30
+                radius: radius
             }).addTo(map);
         }
 
