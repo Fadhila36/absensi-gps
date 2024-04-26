@@ -24,13 +24,43 @@
                             <div class="row">
                                 <div class="col-12">
                                     @if (Session::has('success'))
-                                        <div class="alert alert-success">
-                                            {{ Session::get('success') }}
+                                        <div class="alert alert-success" role="alert">
+                                            <div class="d-flex">
+                                                <div>
+                                                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M5 12l5 5l10 -10"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    {{ Session::get('success') }}
+                                                </div>
+                                            </div>
                                         </div>
                                     @endif
-                                    @if (Session::has('warning'))
-                                        <div class="alert alert-warning">
-                                            {{ Session::get('warning') }}
+                                    @if (Session::has('error'))
+                                        <div class="alert alert-danger" role="alert">
+                                            <div class="d-flex">
+                                                <div>
+                                                    <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon"
+                                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                                                        <path d="M12 8v4"></path>
+                                                        <path d="M12 16h.01"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    {{ Session::get('error') }}
+                                                </div>
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
@@ -97,11 +127,11 @@
                                         <tbody>
                                             @foreach ($departemen as $item)
                                                 <tr>
-                                                    <td>{{ $loop->iteration}}</td>
+                                                    <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->kode_dept }}</td>
                                                     <td>{{ $item->nama_dept }}</td>
                                                     <td>
-                                                        <td>
+                                                    <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="edit btn btn-info btn-sm"
                                                                 kode_dept="{{ $item->kode_dept }}">
@@ -110,7 +140,8 @@
                                                                     stroke="currentColor" stroke-width="2"
                                                                     stroke-linecap="round" stroke-linejoin="round"
                                                                     class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                                        fill="none" />
                                                                     <path
                                                                         d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
                                                                     <path
@@ -119,8 +150,8 @@
                                                                 </svg>
                                                             </a>
                                                             <form
-                                                                action="{{ url('/departemen/delete/' . $item->kode_dept) }}" method="POST"
-                                                                style="margin-left: 5px">
+                                                                action="{{ url('/departemen/delete/' . $item->kode_dept) }}"
+                                                                method="POST" style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"

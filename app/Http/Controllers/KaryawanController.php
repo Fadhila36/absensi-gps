@@ -59,11 +59,14 @@ class KaryawanController extends Controller
                     $folderPath = "public/upload/karyawan/";
                     $request->file('foto')->storeAs($folderPath, $foto);
                 }
-                return Redirect::back()->with('success', 'Data Berhasil Disimpan');
+                return redirect()->back()->with(['success' => 'Data Berhasil Disimpan']);
             }
         } catch (\Exception $e) {
             // dd($e->getMessage());
-            return Redirect::back()->with('error', 'Data Gagal Disimpan');
+            if($e->getCode() == 23000){
+                $message = "NIK sudah terdaftar";
+            }
+            return redirect()->back()->with(['error' => 'Data Gagal Disimpan. ' . $message]);
         }
     }
 

@@ -1,8 +1,23 @@
 @extends('layouts.presensi')
 @section('content')
+<style>
+    .logout{
+        position: absolute;
+        color: white;
+        font-size: 30px;
+        text-decoration: none;
+        right: 8px
+    }
+    .logout:hover{
+        color:white
+    }
+</style>
     <!-- App Capsule -->
     <div id="appCapsule">
         <div class="section" id="user-section">
+            <a href="{{ url('/logout') }}" class="logout">
+                <ion-icon name="log-out-outline"></ion-icon>
+            </a>
             <div id="user-detail">
                 <div class="avatar">
                     @if (!empty(Auth::guard('karyawan')->user()->foto))

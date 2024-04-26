@@ -20,7 +20,7 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ url('presensi/laporan/cetak') }}" target="_blank" method="POST">
+                        <form action="{{ url('presensi/laporan/cetak') }}" id="form-laporan" target="_blank" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-12">
@@ -108,3 +108,50 @@
         </div>
     </div>
 @endsection
+@push('myscript')
+    <script>
+        $(function() {
+            $("#form-laporan").submit(function(e) {
+                let bulan = $("#bulan").val();
+                let tahun = $("#tahun").val();
+                let nik = $("#nik").val();
+                if (bulan == "") {
+                      Swal.fire({
+                        title: 'Warning',
+                        text: 'Bulan harus Dipilih',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#nik").focus();
+                        }
+                    });
+                } else if (tahun == "") {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Tahun harus Dipilih',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#tahun").focus();
+                        }
+                    })
+                } else if (nik == "") {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Nik harus Dipilih',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#nik").focus();
+                        }
+                    })
+                }
+
+                return false
+            })
+        })
+    </script>
+@endpush
