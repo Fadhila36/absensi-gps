@@ -89,7 +89,7 @@
                             });
                         }
                     }
-                })
+                });
             })
             $("#formizin").submit(function(e) {
                 var tgl_izin = $('#tgl_izin').val();
