@@ -30,4 +30,9 @@ class KonfigurasiController extends Controller
             return Redirect::back()->with('error', 'Lokasi kantor dan radius lokasi gagal diupdate!');
         }
     }
+
+    public function jamKantor()
+    {
+        return view('konfigurasi.jam-kantor');
+    }
 }

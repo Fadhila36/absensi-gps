@@ -83,5 +83,6 @@ Route::middleware('auth:user')->group(function () {
     Route::prefix('/setting')->group(function () {
         Route::get('/lokasi', [KonfigurasiController::class, 'lokasiKantor']);
         Route::post('/lokasi/update', [KonfigurasiController::class, 'updateLokasi']);
+        Route::get('/jam', [KonfigurasiController::class, 'jamKantor']);
     });
 });

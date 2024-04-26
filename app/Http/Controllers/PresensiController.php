@@ -277,6 +277,14 @@ class PresensiController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
             ->orderBy('tgl_presensi')
             ->get();
+
+        if (isset($_POST['exportExcel'])) {
+            $time = date("d-m-Y H:i:s");
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Presensi " . $karyawan->nik . " " . $karyawan->nama_lengkap . " " . $time . ".xls");
+            return view('presensi.cetak-laporan-excel', compact('namaBulan', 'bulan', 'tahun', 'karyawan', 'presensi'));
+        }
+
         return view('presensi.cetaklaporan', compact('namaBulan', 'bulan', 'tahun', 'karyawan', 'presensi'));
     }
 
@@ -298,7 +306,11 @@ class PresensiController extends Controller
             ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
             ->groupByRaw('presensi.nik, nama_lengkap');
-
+        if (isset($_POST['exportExcel'])) {
+            $time = date("d-m-Y H:i:s");
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Rekap Presensi $time.xls");
+        }
         // Dynamically add columns for each day of the month
         for ($day = 1; $day <= 31; $day++) {
             $rekap->selectRaw('MAX(CASE WHEN DAY(presensi.tgl_presensi) = ? THEN CONCAT(presensi.jam_in, "-", IFNULL(presensi.jam_out, "00:00:00")) ELSE "" END) AS tgl_' . $day, [$day]);
@@ -310,9 +322,9 @@ class PresensiController extends Controller
 
     public function izinSakit(Request $request)
     {
-        
+
         $query = PengajuanIzin::query();
-        $query->select('id', 'tgl_izin', 'pengajuan_izin.nik', 'nama_lengkap', 'jabatan', 'status','status_approved','keterangan');
+        $query->select('id', 'tgl_izin', 'pengajuan_izin.nik', 'nama_lengkap', 'jabatan', 'status', 'status_approved', 'keterangan');
         $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
@@ -320,10 +332,10 @@ class PresensiController extends Controller
         if (!empty($request->nik)) {
             $query->where('pengajuan_izin.nik', $request->nik);
         }
-        if(!empty($request->nama_lengkap)){
-            $query->where('nama_lengkap', 'like', '%'.$request->nama_lengkap.'%');
+        if (!empty($request->nama_lengkap)) {
+            $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
         }
-        if($request->status_approved != "" ){
+        if ($request->status_approved != "") {
             $query->where('status_approved', $request->status_approved);
         }
         $query->orderBy('tgl_izin', 'desc');
