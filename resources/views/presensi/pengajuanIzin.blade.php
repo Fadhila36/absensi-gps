@@ -4,17 +4,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        .datepicker-modal{
+        .datepicker-modal {
             max-height: 470px !important;
         }
+
         .datepicker-date-display {
             background-color: #0f3a7f !important;
         }
-        .datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done {
+
+        .datepicker-cancel,
+        .datepicker-clear,
+        .datepicker-today,
+        .datepicker-done {
             color: #0f3a7f !important;
         }
-        .datepicker-table td.is-selected{
-           background-color: #0f3a7f !important; 
+
+        .datepicker-table td.is-selected {
+            background-color: #0f3a7f !important;
         }
     </style>
     <div class="appHeader bg-primary text-light">
@@ -62,6 +68,29 @@
                 format: "yyyy-mm-dd"
             });
 
+            $("#tgl_izin").change(function(e) {
+                let tgl_izin = $(this).val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/presensi/izin/check',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        tgl_izin: tgl_izin
+                    },
+                    cache: false,
+                    success: function(respond) {
+                        if (respond == 1) {
+                            Swal.fire({
+                                title: 'Oops!',
+                                text: 'Anda Sudah Mengajukan Izin/Sakit Pada Tanggal Ini!',
+                                icon: 'warning',
+                            }).then((result) => {
+                                $("#tgl_izin").val("");
+                            });
+                        }
+                    }
+                })
+            })
             $("#formizin").submit(function(e) {
                 var tgl_izin = $('#tgl_izin').val();
                 var status = $('#status').val();
@@ -74,14 +103,14 @@
                     });
                     return false;
                 } else if (status == "") {
-                     Swal.fire({
+                    Swal.fire({
                         title: 'Oops!',
                         text: 'Status Harus Di Isi!',
                         icon: 'warning',
                     });
                     return false;
                 } else if (keterangan == "") {
-                     Swal.fire({
+                    Swal.fire({
                         title: 'Oops!',
                         text: 'Keterangan Harus Di Isi!',
                         icon: 'warning',

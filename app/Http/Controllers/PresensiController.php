@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use App\Models\PengajuanIzin;
 
 class PresensiController extends Controller
 {
@@ -307,12 +308,27 @@ class PresensiController extends Controller
         return view('presensi.cetakrekap', compact('rekap', 'bulan', 'tahun', 'namaBulan'));
     }
 
-    public function izinSakit()
+    public function izinSakit(Request $request)
     {
-        $izinSakit = DB::table('pengajuan_izin')
-            ->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik')
-            ->orderBy('tgl_izin', 'desc')
-            ->get();
+        
+        $query = PengajuanIzin::query();
+        $query->select('id', 'tgl_izin', 'pengajuan_izin.nik', 'nama_lengkap', 'jabatan', 'status','status_approved','keterangan');
+        $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        if (!empty($request->dari) && !empty($request->sampai)) {
+            $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
+        }
+        if (!empty($request->nik)) {
+            $query->where('pengajuan_izin.nik', $request->nik);
+        }
+        if(!empty($request->nama_lengkap)){
+            $query->where('nama_lengkap', 'like', '%'.$request->nama_lengkap.'%');
+        }
+        if($request->status_approved != "" ){
+            $query->where('status_approved', $request->status_approved);
+        }
+        $query->orderBy('tgl_izin', 'desc');
+        $izinSakit = $query->paginate(2);
+        $izinSakit->appends($request->all());
         return view('presensi.izin-sakit', compact('izinSakit'));
     }
 
@@ -348,5 +364,14 @@ class PresensiController extends Controller
         } else {
             return Redirect::back()->with('error', 'Data Gagal Diinput');
         }
+    }
+
+    public function checkIzin(Request $request)
+    {
+        $tgl_izin = $request->tgl_izin;
+        $nik = Auth::guard('karyawan')->user()->nik;
+
+        $cek = DB::table('pengajuan_izin')->where('nik', $nik)->where('tgl_izin', $tgl_izin)->count();
+        return $cek;
     }
 }

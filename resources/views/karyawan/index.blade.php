@@ -212,7 +212,8 @@
                                                 d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
                                             <path d="M14 16h2" />
                                             <path d="M14 12h4" />
-                                        </svg> </span>
+                                        </svg>
+                                    </span>
                                     <input type="number" value="" id="nik" class="form-control"
                                         name="nik"placeholder="Nik">
                                 </div>
