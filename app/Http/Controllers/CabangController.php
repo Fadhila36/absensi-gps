@@ -59,6 +59,7 @@ class CabangController extends Controller
             return redirect()->back()->with('success', 'Data Cabang Berhasil Di Update');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengupdate data cabang. Silakan coba lagi.');
+            return redirect()->back()->with('error', 'Gagal Mengupdate data cabang. Silakan coba lagi.');
         }
     }
 
