@@ -6,10 +6,10 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <div class="page-pretitle">
-                        Departemen
+                        Cabang
                     </div>
                     <h2 class="page-title">
-                        Data Departemen
+                        Data Cabang
                     </h2>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <a href="#" class="btn btn-primary" id="btnTambahDepartemen">
+                                    <a href="#" class="btn btn-primary" id="btnTambahCabang">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -84,14 +84,12 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-12">
-                                    <form action="{{ url('/departemen') }}" method="GET">
+                                    <form action="{{ url('/cabang') }}" method="GET">
                                         <div class="row">
                                             <div class="col-10">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="nama_dept"
-                                                        name="nama_dept" placeholder="Cari Departemen"
-                                                        value="{{ Request('nama_dept') }}">
-                                                </div>
+                                                <select name="kode_cabang" class="form-select" id="">
+                                                    <option value="">Semua Cabang</option>
+                                                </select>
                                             </div>
                                             <div class="col-2">
                                                 <div class="form-group">
@@ -119,21 +117,25 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Kode Departemen</th>
-                                                <th>Nama Departemen</th>
+                                                <th>Kode Cabang</th>
+                                                <th>Nama Cabang</th>
+                                                <th>Lokasi</th>
+                                                <th>Radius</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($departemen as $item)
+                                            @foreach ($cabang as $d)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->kode_dept }}</td>
-                                                    <td>{{ $item->nama_dept }}</td>
+                                                    <td>{{ $d->kode_cabang }}</td>
+                                                    <td>{{ $d->nama_cabang }}</td>
+                                                    <td>{{ $d->lokasi_cabang }}</td>
+                                                    <td>{{ $d->radius_cabang }} Meter</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="edit btn btn-info btn-sm"
-                                                                kode_dept="{{ $item->kode_dept }}">
+                                                                kode_cabang="{{ $d->kode_cabang }}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
@@ -149,7 +151,7 @@
                                                                 </svg>
                                                             </a>
                                                             <form
-                                                                action="{{ url('/departemen/delete/' . $item->kode_dept) }}"
+                                                                action="{{ url('/cabang/delete/' . $d->kode_cabang) }}"
                                                                 method="POST" style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">
@@ -185,15 +187,15 @@
     </div>
 
     {{-- Modal Add Data --}}
-    <div class="modal modal-blur fade" id="modal-addDepartemen" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-addCabang" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Departemen</h5>
+                    <h5 class="modal-title">Tambah Data Cabang</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('/departemen/store') }}" method="POST" id="form-addDepartemen">
+                    <form action="{{ url('/cabang/store') }}" method="POST" id="form-addCabang">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -213,8 +215,8 @@
                                             <path d="M14 16h2" />
                                             <path d="M14 12h4" />
                                         </svg> </span>
-                                    <input type="text" value="" id="kode_dept" class="form-control"
-                                        name="kode_dept" placeholder="Kode Dept">
+                                    <input type="text" value="" id="kode_cabang" class="form-control"
+                                        name="kode_cabang" placeholder="Kode Cabang">
                                 </div>
                             </div>
                         </div>
@@ -223,15 +225,63 @@
                                 <div class="input-icon mb-3">
                                     <span class="input-icon-addon">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                        </svg> </span>
-                                    <input type="text" value="" id="nama_dept" class="form-control"
-                                        name="nama_dept" placeholder="Nama Departemen">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M3 21l18 0" />
+                                            <path d="M5 21v-14l8 -4v18" />
+                                            <path d="M19 21v-10l-6 -4" />
+                                            <path d="M9 9l0 .01" />
+                                            <path d="M9 12l0 .01" />
+                                            <path d="M9 15l0 .01" />
+                                            <path d="M9 18l0 .01" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" value="" id="nama_cabang" class="form-control"
+                                        name="nama_cabang" placeholder="Nama Cabang">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="input-icon mb-3">
+                                    <span class="input-icon-addon">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-map-pins">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M10.828 9.828a4 4 0 1 0 -5.656 0l2.828 2.829l2.828 -2.829z" />
+                                            <path d="M8 7l0 .01" />
+                                            <path d="M18.828 17.828a4 4 0 1 0 -5.656 0l2.828 2.829l2.828 -2.829z" />
+                                            <path d="M16 15l0 .01" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" value="" id="lokasi_cabang" class="form-control"
+                                        name="lokasi_cabang" placeholder="Lokasi Cabang">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="input-icon mb-3">
+                                    <span class="input-icon-addon">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-radar">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M21 12h-8a1 1 0 1 0 -1 1v8a9 9 0 0 0 9 -9" />
+                                            <path d="M16 9a5 5 0 1 0 -7 7" />
+                                            <path d="M20.486 9a9 9 0 1 0 -11.482 11.495" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" value="" id="radius_cabang" class="form-control"
+                                        name="radius_cabang" placeholder="Radius Cabang">
                                 </div>
                             </div>
                         </div>
@@ -260,11 +310,11 @@
     </div>
 
     {{-- Modal Edit Data --}}
-    <div class="modal modal-blur fade" id="modal-editDepartemen" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="modal-editCabang" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Data Departemen</h5>
+                    <h5 class="modal-title">Edit Data Cabang</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="loadEditForm">
@@ -278,24 +328,24 @@
 @push('myscript')
     <script>
         $(function() {
-            $('#btnTambahDepartemen').on('click', function() {
-                $('#modal-addDepartemen').modal('show');
+            $('#btnTambahCabang').on('click', function() {
+                $('#modal-addCabang').modal('show');
             })
             $('.edit').on('click', function() {
-                let kode_dept = $(this).attr('kode_dept');
+                let kode_cabang = $(this).attr('kode_cabang');
                 $.ajax({
                     type: "POST",
-                    url: "/departemen/edit",
+                    url: "/cabang/edit",
                     cache: false,
                     data: {
                         _token: "{{ csrf_token() }}",
-                        kode_dept: kode_dept
+                        kode_cabang: kode_cabang
                     },
                     success: function(respond) {
                         $('#loadEditForm').html(respond);
                     }
                 })
-                $('#modal-editDepartemen').modal('show');
+                $('#modal-editCabang').modal('show');
             })
 
             $('.delete-confirm').on('click', function(e) {
@@ -320,70 +370,57 @@
                     }
                 });
             })
-            $('#form-addDepartemen').on('submit', function(e) {
-                let nik = $("#nik").val();
-                let nama_lengkap = $("#nama_lengkap").val();
-                let jabatan = $("#jabatan").val();
-                let no_hp = $("#no_hp").val();
-                let kode_dept = $("#form-addDepartemen").find("#kode_dept").val();
-                if (nik == "") {
-                    // alert('Nik harus diisi');
+            $('#form-addCabang').on('submit', function(e) {
+                let kode_cabang = $("#kode_cabang").val();;
+                let nama_cabang = $("#nama_cabang").val();;
+                let lokasi_cabang = $("#lokasi_cabang").val();;
+                let radius_cabang = $("#radius_cabang").val();;
+                if (kode_cabang == "") {
+                    // alert('kode_cabang harus diisi');
                     Swal.fire({
                         title: 'Warning',
-                        text: 'Nik harus diisi',
+                        text: 'Kode Cabang harus diisi',
                         icon: 'warning',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $("#nik").focus();
+                            $("#kode_cabang").focus();
                         }
                     });
                     return false;
-                } else if (nama_lengkap == "") {
+                } else if (nama_cabang == "") {
                     Swal.fire({
                         title: 'Warning',
-                        text: 'Nama harus diisi',
+                        text: 'Nama Cabang harus diisi',
                         icon: 'warning',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $("#nama_lengkap").focus();
+                            $("#nama_cabang").focus();
                         }
                     });
                     return false;
-                } else if (jabatan == "") {
+                } else if (lokasi_cabang == "") {
                     Swal.fire({
                         title: 'Warning',
-                        text: 'Jabatan harus diisi',
+                        text: 'Lokasi Cabang harus diisi',
                         icon: 'warning',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $("#jabatan").focus();
+                            $("#lokasi_cabang").focus();
                         }
                     });
                     return false;
-                } else if (no_hp == "") {
+                }else if (radius_cabang == "") {
                     Swal.fire({
                         title: 'Warning',
-                        text: 'Nomor HP harus diisi',
+                        text: 'Radius Cabang harus diisi',
                         icon: 'warning',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $("#no_hp").focus();
-                        }
-                    });
-                    return false;
-                } else if (kode_dept == "") {
-                    Swal.fire({
-                        title: 'Warning',
-                        text: 'Kode departemen harus diisi',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $("#kode_dept").focus();
+                            $("#radius_cabang").focus();
                         }
                     });
                     return false;
