@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\KaryawanController;
@@ -84,5 +85,13 @@ Route::middleware('auth:user')->group(function () {
         Route::get('/lokasi', [KonfigurasiController::class, 'lokasiKantor']);
         Route::post('/lokasi/update', [KonfigurasiController::class, 'updateLokasi']);
         Route::get('/jam', [KonfigurasiController::class, 'jamKantor']);
+    });
+
+    Route::prefix('/cabang')->group(function () {
+        Route::get('/', [CabangController::class, 'index']);
+        Route::post('/store', [CabangController::class, 'store']);
+        Route::post('/edit', [CabangController::class, 'edit']);
+        Route::post('/update/{kode_cabang}', [CabangController::class, 'update']);
+        Route::post('/delete/{kode_cabang}', [CabangController::class, 'delete']);
     });
 });
