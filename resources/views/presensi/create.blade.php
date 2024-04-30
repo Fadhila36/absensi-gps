@@ -40,11 +40,11 @@
     <div class="row">
         <div class="col">
             @if ($cek > 0)
-                 <button id="takeabsen" class="btn btn-danger btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
-                Pulang</button>
+                <button id="takeabsen" class="btn btn-danger btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
+                    Pulang</button>
             @else
-            <button id="takeabsen" class="btn btn-primary btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
-                Masuk</button>
+                <button id="takeabsen" class="btn btn-primary btn-block"><ion-icon name="camera-outline"></ion-icon>Absen
+                    Masuk</button>
             @endif
         </div>
     </div>
@@ -67,9 +67,9 @@
 
 @push('myscript')
     <script>
-        var notifikasi_in= document.getElementById('notifikasi_in');
-        var notifikasi_out= document.getElementById('notifikasi_out');
-        var notifikasi_radius= document.getElementById('notifikasi_radius');
+        var notifikasi_in = document.getElementById('notifikasi_in');
+        var notifikasi_out = document.getElementById('notifikasi_out');
+        var notifikasi_radius = document.getElementById('notifikasi_radius');
         Webcam.set({
             height: 480,
             widht: 640,
@@ -89,14 +89,14 @@
             var map = L.map('map', {
                 attributionControl: false
             }).setView([position.coords.latitude, position.coords.longitude], 18);
-            let lokasiKantor = "{{ $lok_kantor->lokasi_kantor }}";
+            let lokasiKantor = "{{ $lok_kantor->lokasi_cabang }}";
             let lok = lokasiKantor.split(",");
             let latitude = lok[0];
             let longitude = lok[1];
-            let radius = "{{ $lok_kantor->radius }}";
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.inditara.com">PT. Intelek Digital Nusantara</a>'
+            let radius = "{{ $lok_kantor->radius_cabang }}";
+            L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             }).addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
             var circle = L.circle([latitude, longitude], {
@@ -142,9 +142,9 @@
                             location.href = '/dashboard';
                         }, 3000);
                     } else {
-                       if (status[2] == "radius") {
+                        if (status[2] == "radius") {
                             notifikasi_radius.play();
-                        } 
+                        }
                         Swal.fire({
                             title: 'Error!',
                             text: status[1],

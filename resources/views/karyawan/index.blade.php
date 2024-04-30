@@ -138,22 +138,23 @@
                                                 <th>No. HP</th>
                                                 <th>Foto</th>
                                                 <th>Departemen</th>
+                                                <th>Cabang</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($karyawan as $karyawans)
+                                            @foreach ($karyawan as $d)
                                                 @php
-                                                    $path = Storage::url('upload/karyawan/' . $karyawans->foto);
+                                                    $path = Storage::url('upload/karyawan/' . $d->foto);
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration + $karyawan->firstItem() - 1 }}</td>
-                                                    <td>{{ $karyawans->nik }}</td>
-                                                    <td>{{ $karyawans->nama_lengkap }}</td>
-                                                    <td>{{ $karyawans->jabatan }}</td>
-                                                    <td>{{ $karyawans->no_hp }}</td>
+                                                    <td>{{ $d->nik }}</td>
+                                                    <td>{{ $d->nama_lengkap }}</td>
+                                                    <td>{{ $d->jabatan }}</td>
+                                                    <td>{{ $d->no_hp }}</td>
                                                     <td>
-                                                        @if (empty($karyawans->foto))
+                                                        @if (empty($d->foto))
                                                             <img src="{{ asset('assets/img/avatar.png') }}"
                                                                 class="avatar" alt="no-photo">
                                                         @else
@@ -161,11 +162,12 @@
                                                                 class="avatar">
                                                         @endif
                                                     </td>
-                                                    <td>{{ $karyawans->nama_dept }}</td>
+                                                    <td>{{ $d->nama_dept }}</td>
+                                                    <td>{{ $d->kode_cabang }}</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="edit btn btn-info btn-sm"
-                                                                nik="{{ $karyawans->nik }}">
+                                                                nik="{{ $d->nik }}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
@@ -181,7 +183,7 @@
                                                                 </svg>
                                                             </a>
                                                             <form
-                                                                action="{{ url('/karyawan/delete/' . $karyawans->nik) }}"
+                                                                action="{{ url('/karyawan/delete/' . $d->nik) }}"
                                                                 method="POST" style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">
@@ -331,6 +333,18 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-12">
+                                <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                    <option value="">Cabang</option>
+                                    @foreach ($cabang as $item)
+                                        <option {{ Request('kode_cabang') == $item->kode_cabang ? 'selected' : '' }}
+                                            value="{{ $item->kode_cabang }}">{{ strtoupper($item->nama_cabang) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
                                 <div class="form-group">
                                     <button class="btn btn-primary w-100">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -420,6 +434,7 @@
                 let jabatan = $("#jabatan").val();
                 let no_hp = $("#no_hp").val();
                 let kode_dept = $("#form-addKaryawan").find("#kode_dept").val();
+                let kode_cabang = $("#form-addKaryawan").find("#kode_cabang").val();
                 if (nik == "") {
                     // alert('Nik harus diisi');
                     Swal.fire({
@@ -478,6 +493,18 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $("#kode_dept").focus();
+                        }
+                    });
+                    return false;
+                } else if (kode_cabang == "") {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Nama Cabang harus diisi',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#kode_cabang").focus();
                         }
                     });
                     return false;

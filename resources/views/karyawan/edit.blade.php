@@ -98,6 +98,18 @@
     </div>
     <div class="row mt-2">
         <div class="col-12">
+            <select name="kode_cabang" id="kode_cabang" class="form-select">
+                <option value="">Cabang</option>
+                @foreach ($cabang as $item)
+                    <option {{ $karyawan->kode_cabang == $item->kode_cabang ? 'selected' : '' }}
+                        value="{{ $item->kode_cabang }}">{{ strtoupper($item->nama_cabang) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
             <div class="form-group">
                 <button class="btn btn-primary w-100">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

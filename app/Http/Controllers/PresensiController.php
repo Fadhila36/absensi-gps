@@ -20,17 +20,19 @@ class PresensiController extends Controller
             ->where('tgl_presensi', $hari_ini)
             ->where('nik', $nik)
             ->count();
-        $lok_kantor = DB::table('config_lokasi')->where('id', 1)->first();
+        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+        $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
         return view('presensi.create', compact('cek', 'lok_kantor'));
     }
 
     public function store(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
+        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $tgl_presensi = date('Y-m-d');
         $jam = date('H:i:s');
-        $lok_kantor = DB::table('config_lokasi')->where('id', 1)->first();
-        $lok = explode(',', $lok_kantor->lokasi_kantor);
+        $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
+        $lok = explode(',', $lok_kantor->lokasi_cabang);
         $latitudeKantor = $lok[0];
         $longitudeKantor = $lok[1];
         $lokasi = $request->lokasi;
@@ -62,7 +64,7 @@ class PresensiController extends Controller
             ->where('tgl_presensi', $tgl_presensi)
             ->where('nik', $nik)
             ->count();
-        if ($radius > $lok_kantor->radius) {
+        if ($radius > $lok_kantor->radius_cabang) {
             echo "error|Maaf Anda Diluar Jangkauan, Jarak Anda " . $radius . " Meter Dari Kantor|radius";
         } else {
 
