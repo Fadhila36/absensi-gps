@@ -33,6 +33,73 @@ class KonfigurasiController extends Controller
 
     public function jamKantor()
     {
-        return view('konfigurasi.jam-kantor');
+        $jam_kerja = DB::table('jam_kerja')->orderBy('kode_jam_kerja')->get();
+        return view('konfigurasi.jam-kantor', compact('jam_kerja'));
+    }
+
+    public function storeJamKantor(Request $request)
+    {
+        $kode_jam_kerja = $request->kode_jam_kerja;
+        $nama_jam_kerja = $request->nama_jam_kerja;
+        $awal_jam_masuk = $request->awal_jam_masuk;
+        $jam_masuk = $request->jam_masuk;
+        $akhir_jam_masuk = $request->akhir_jam_masuk;
+        $jam_pulang = $request->jam_pulang;
+
+        $data = [
+            'kode_jam_kerja' => $kode_jam_kerja,
+            'nama_jam_kerja' => $nama_jam_kerja,
+            'awal_jam_masuk' => $awal_jam_masuk,
+            'jam_masuk' => $jam_masuk,
+            'akhir_jam_masuk' => $akhir_jam_masuk,
+            'jam_pulang' => $jam_pulang
+        ];
+        try {
+            DB::table('jam_kerja')->insert($data);
+            return redirect()->back()->with('success', 'Jam kerja baru berhasil ditambahkan!');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memproses data. Silakan coba lagi.');
+        }
+    }
+
+
+    public function editJamKantor(Request $request)
+    {
+        $kode_jam_kerja = $request->kode_jam_kerja;
+        $jam_kerja = DB::table('jam_kerja')->where('kode_jam_kerja', $kode_jam_kerja)->first();
+        return view('konfigurasi.edit-jam-kantor', compact('jam_kerja'));
+    }
+
+    public function updateJamKantor($kode_jam_kerja, Request $request)
+    {
+        $nama_jam_kerja = $request->nama_jam_kerja;
+        $awal_jam_masuk = $request->awal_jam_masuk;
+        $jam_masuk = $request->jam_masuk;
+        $akhir_jam_masuk = $request->akhir_jam_masuk;
+        $jam_pulang = $request->jam_pulang;
+
+        $data = [
+            'nama_jam_kerja' => $nama_jam_kerja,
+            'awal_jam_masuk' => $awal_jam_masuk,
+            'jam_masuk' => $jam_masuk,
+            'akhir_jam_masuk' => $akhir_jam_masuk,
+            'jam_pulang' => $jam_pulang
+        ];
+        try {
+            DB::table('jam_kerja')->where('kode_jam_kerja', $kode_jam_kerja)->update($data);
+            return redirect()->back()->with('success', 'Jam kerja baru berhasil diupdate!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memproses data. Silakan coba lagi.');
+        }
+    }
+
+    public function deleteJamKantor($kode_jam_kerja)
+    {
+        $hapus = DB::table('jam_kerja')->where('kode_jam_kerja', $kode_jam_kerja)->delete();
+        if ($hapus) {
+            return redirect()->back()->with('success', 'Data Berhasil Dihapus');
+        } else {
+            return redirect()->back()->with('error', 'Data Gagal Dihapus');
+        }
     }
 }

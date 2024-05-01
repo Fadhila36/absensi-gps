@@ -85,6 +85,10 @@ Route::middleware('auth:user')->group(function () {
         Route::get('/lokasi', [KonfigurasiController::class, 'lokasiKantor']);
         Route::post('/lokasi/update', [KonfigurasiController::class, 'updateLokasi']);
         Route::get('/jam', [KonfigurasiController::class, 'jamKantor']);
+        Route::post('/jam/store', [KonfigurasiController::class, 'storeJamKantor']);
+        Route::post('/jam/edit', [KonfigurasiController::class, 'editJamKantor']);
+        Route::post('/jam/update/{kode_jam_kerja}', [KonfigurasiController::class, 'updateJamKantor']);
+        Route::post('/jam/delete/{kode_jam_kerja}', [KonfigurasiController::class, 'deleteJamKantor']);
     });
 
     Route::prefix('/cabang')->group(function () {
