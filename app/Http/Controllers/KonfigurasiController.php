@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SetJamKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -57,7 +58,7 @@ class KonfigurasiController extends Controller
         try {
             DB::table('jam_kerja')->insert($data);
             return redirect()->back()->with('success', 'Jam kerja baru berhasil ditambahkan!');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memproses data. Silakan coba lagi.');
         }
     }
@@ -108,5 +109,27 @@ class KonfigurasiController extends Controller
         $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
         $jam_kerja = DB::table('jam_kerja')->orderBy('nama_jam_kerja')->get();
         return view('konfigurasi.set-jam-kerja', compact('karyawan', 'jam_kerja'));
+    }
+
+    public function storeSetJamKerja(Request $request)
+    {
+        $nik = $request->nik;
+        $hari = $request->hari;
+        $kode_jam_kerja = $request->kode_jam_kerja;
+
+        for ($i = 0; $i < count($hari); $i++) {
+            $data[] = [
+                'nik' => $nik,
+                'hari' => $hari[$i],
+                'kode_jam_kerja' => $kode_jam_kerja[$i]
+            ];
+        }
+
+        try {
+            SetJamKerja::insert($data);
+            return redirect('/karyawan')->with('success', 'Jam kerja baru berhasil ditambahkan!');
+        }catch (\Exception $e) {
+            return redirect('/karyawan')->with('error', 'Gagal memproses data. Silakan coba lagi.');
+        }
     }
 }

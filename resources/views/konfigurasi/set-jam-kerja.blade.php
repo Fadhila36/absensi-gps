@@ -33,8 +33,9 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <form action="#" methopd="POST">
+                    <form action="{{ url('setting/set-jam-kerja/store') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="nik" value="{{ $karyawan->nik }}">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -44,9 +45,11 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Senin</td>
+                                    <td>Senin
+                                    <input type="hidden" name="hari[]" value="Senin">
+                                    </td>
                                     <td>
-                                        <select name="kode_jam_kerja" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -56,9 +59,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Selasa</td>
+                                    <td>Selasa
+                                        <input type="hidden" name="hari[]" value="Selasa">
+                                    </td>
                                     <td>
-                                        <select name="kode_jam_kerja" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -68,9 +73,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Rabu</td>
+                                    <td>Rabu
+                                        <input type="hidden" name="hari[]" value="Rabu">
+                                    </td>
                                     <td>
-                                        <select name="kode_jam_kerja" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -80,9 +87,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Kamis</td>
+                                    <td>Kamis
+                                        <input type="hidden" name="hari[]" value="Kamis">
+                                    </td>
                                     <td>
-                                        <select name="kode_jam_kerja" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -92,9 +101,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Jumat</td>
+                                    <td>Jumat
+                                        <input type="hidden" name="hari[]" value="Jumat">
+                                    </td>
                                     <td>
-                                        <select name="kode_jam_kerja" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -104,9 +115,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Sabtu</td>
+                                    <td>Sabtu
+                                        <input type="hidden" name="hari[]" value="Sabtu">
+                                    </td>
                                     <td>
-                                        <select name="kode_jam_kerja" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -117,8 +130,8 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <button class="btn btn-primary w-100" type="submit">Simpan</button>
                     </form>
-                    <button class="btn btn-primary w-100" type="submit">Simpan</button>
                 </div>
                 <div class="col-6">
                     <table class="table">
