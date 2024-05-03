@@ -91,6 +91,7 @@ Route::middleware('auth:user')->group(function () {
         Route::post('/jam/delete/{kode_jam_kerja}', [KonfigurasiController::class, 'deleteJamKantor']);
         Route::get('/set-jam-kerja/{nik}', [KonfigurasiController::class, 'setJamKerja']);
         Route::post('/set-jam-kerja/store', [KonfigurasiController::class, 'storeSetJamKerja']);
+        Route::post('/set-jam-kerja/update', [KonfigurasiController::class, 'updateSetJamKerja']);
         
     });
 

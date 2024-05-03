@@ -108,7 +108,13 @@ class KonfigurasiController extends Controller
     {
         $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
         $jam_kerja = DB::table('jam_kerja')->orderBy('nama_jam_kerja')->get();
-        return view('konfigurasi.set-jam-kerja', compact('karyawan', 'jam_kerja'));
+        $cek_jam_kerja = DB::table('konfigurasi_jam_kerja')->where('nik', $nik)->count();
+        if ($cek_jam_kerja > 0) {
+            $set_jam_kerja = DB::table('konfigurasi_jam_kerja')->where('nik', $nik)->get();
+            return view('konfigurasi.edit-jam-kerja', compact('karyawan', 'jam_kerja', 'set_jam_kerja'));
+        } else {
+            return view('konfigurasi.set-jam-kerja', compact('karyawan', 'jam_kerja'));
+        }
     }
 
     public function storeSetJamKerja(Request $request)
@@ -129,6 +135,32 @@ class KonfigurasiController extends Controller
             SetJamKerja::insert($data);
             return redirect('/karyawan')->with('success', 'Jam kerja baru berhasil ditambahkan!');
         }catch (\Exception $e) {
+            return redirect('/karyawan')->with('error', 'Gagal memproses data. Silakan coba lagi.');
+        }
+    }
+
+    public function updateSetJamKerja(Request $request)
+    {
+        $nik = $request->nik;
+        $hari = $request->hari;
+        $kode_jam_kerja = $request->kode_jam_kerja;
+
+        for ($i = 0; $i < count($hari); $i++) {
+            $data[] = [
+                'nik' => $nik,
+                'hari' => $hari[$i],
+                'kode_jam_kerja' => $kode_jam_kerja[$i]
+            ];
+        }
+
+        DB::beginTransaction();
+        try {
+            SetJamKerja::where('nik', $nik)->delete();
+            SetJamKerja::insert($data);
+            DB::commit();
+            return redirect('/karyawan')->with('success', 'Jam kerja baru berhasil di Update!');
+        } catch (\Exception $e) {
+            DB::rollBack();
             return redirect('/karyawan')->with('error', 'Gagal memproses data. Silakan coba lagi.');
         }
     }
