@@ -128,86 +128,102 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-12">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>NIK</th>
-                                                <th>Nama</th>
-                                                <th>Jabatan</th>
-                                                <th>No. HP</th>
-                                                <th>Foto</th>
-                                                <th>Departemen</th>
-                                                <th>Cabang</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($karyawan as $d)
-                                                @php
-                                                    $path = Storage::url('upload/karyawan/' . $d->foto);
-                                                @endphp
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $loop->iteration + $karyawan->firstItem() - 1 }}</td>
-                                                    <td>{{ $d->nik }}</td>
-                                                    <td>{{ $d->nama_lengkap }}</td>
-                                                    <td>{{ $d->jabatan }}</td>
-                                                    <td>{{ $d->no_hp }}</td>
-                                                    <td>
-                                                        @if (empty($d->foto))
-                                                            <img src="{{ asset('assets/img/avatar.png') }}"
-                                                                class="avatar" alt="no-photo">
-                                                        @else
-                                                            <img src="{{ url($path) }}" alt="avatar"
-                                                                class="avatar">
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $d->nama_dept }}</td>
-                                                    <td>{{ $d->kode_cabang }}</td>
-                                                    <td>
-                                                        <div class="btn-group">
-                                                            <a href="#" class="edit btn btn-info btn-sm"
-                                                                nik="{{ $d->nik }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round"
-                                                                    class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                                                    <path stroke="none" d="M0 0h24v24H0z"
-                                                                        fill="none" />
-                                                                    <path
-                                                                        d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                                                    <path
-                                                                        d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
-                                                                    <path d="M16 5l3 3" />
-                                                                </svg>
-                                                            </a>
-                                                            <form
-                                                                action="{{ url('/karyawan/delete/' . $d->nik) }}"
-                                                                method="POST" style="margin-left: 5px">
-                                                                @csrf
-                                                                <a class="btn btn-danger btn-sm delete-confirm">
+                                                    <th>No</th>
+                                                    <th>NIK</th>
+                                                    <th>Nama</th>
+                                                    <th>Jabatan</th>
+                                                    <th>No. HP</th>
+                                                    <th>Foto</th>
+                                                    <th>Departemen</th>
+                                                    <th>Cabang</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($karyawan as $d)
+                                                    @php
+                                                        $path = Storage::url('upload/karyawan/' . $d->foto);
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $loop->iteration + $karyawan->firstItem() - 1 }}</td>
+                                                        <td>{{ $d->nik }}</td>
+                                                        <td>{{ $d->nama_lengkap }}</td>
+                                                        <td>{{ $d->jabatan }}</td>
+                                                        <td>{{ $d->no_hp }}</td>
+                                                        <td>
+                                                            @if (empty($d->foto))
+                                                                <img src="{{ asset('assets/img/avatar.png') }}"
+                                                                    class="avatar" alt="no-photo">
+                                                            @else
+                                                                <img src="{{ url($path) }}" alt="avatar"
+                                                                    class="avatar">
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $d->nama_dept }}</td>
+                                                        <td>{{ $d->kode_cabang }}</td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <a href="#" class="edit btn btn-info btn-sm"
+                                                                    nik="{{ $d->nik }}">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                         height="24" viewBox="0 0 24 24" fill="none"
                                                                         stroke="currentColor" stroke-width="2"
                                                                         stroke-linecap="round" stroke-linejoin="round"
-                                                                        class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
+                                                                        class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                                                         <path stroke="none" d="M0 0h24v24H0z"
                                                                             fill="none" />
-                                                                        <path d="M4 7h16" />
                                                                         <path
-                                                                            d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                            d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
                                                                         <path
-                                                                            d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                                                        <path d="M10 12l4 4m0 -4l-4 4" />
+                                                                            d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                                        <path d="M16 5l3 3" />
                                                                     </svg>
                                                                 </a>
-                                                            </form>
-                                                        </div>
-                                                    </td>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                                <a href="/setting/set-jam-kerja/{{ $d->nik }}" class="btn btn-success btn-sm"
+                                                                    nik="{{ $d->nik }}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="icon icon-tabler icons-tabler-outline icon-tabler-clock">
+                                                                        <path stroke="none" d="M0 0h24v24H0z"
+                                                                            fill="none" />
+                                                                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                                                        <path d="M12 7v5l3 3" />
+                                                                    </svg>
+                                                                </a>
+                                                                <form action="{{ url('/karyawan/delete/' . $d->nik) }}"
+                                                                    method="POST" style="margin-left: 5px">
+                                                                    @csrf
+                                                                    <a class="btn btn-danger btn-sm delete-confirm">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none"
+                                                                            stroke="currentColor" stroke-width="2"
+                                                                            stroke-linecap="round" stroke-linejoin="round"
+                                                                            class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
+                                                                            <path stroke="none" d="M0 0h24v24H0z"
+                                                                                fill="none" />
+                                                                            <path d="M4 7h16" />
+                                                                            <path
+                                                                                d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                            <path
+                                                                                d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                                            <path d="M10 12l4 4m0 -4l-4 4" />
+                                                                        </svg>
+                                                                    </a>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     {{ $karyawan->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>

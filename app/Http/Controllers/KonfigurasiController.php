@@ -102,4 +102,11 @@ class KonfigurasiController extends Controller
             return redirect()->back()->with('error', 'Data Gagal Dihapus');
         }
     }
+
+    public function setJamKerja($nik)
+    {
+        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
+        $jam_kerja = DB::table('jam_kerja')->orderBy('nama_jam_kerja')->get();
+        return view('konfigurasi.set-jam-kerja', compact('karyawan', 'jam_kerja'));
+    }
 }
