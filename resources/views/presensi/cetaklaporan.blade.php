@@ -260,7 +260,7 @@
                         @php
                             $path_in = Storage::url('upload/absensi/' . $d->foto_in);
                             $path_out = Storage::url('upload/absensi/' . $d->foto_out);
-                            $jamTerlambat = selisih('07:00:00', $d->jam_in);
+                            $jamTerlambat = selisih($d->jam_masuk, $d->jam_in);
                         @endphp
                         <tr>
                             <td>{{ $loop->iteration }}</td>
@@ -283,8 +283,8 @@
                                     </svg>
                                 @endif
                             </td>
-                            <td class="{{ $d->jam_in > '07:00' ? 'keterangan-terlambat' : 'keterangan-tepat-waktu' }}">
-                                @if ($d->jam_in > '07:00')
+                            <td class="{{ $d->jam_in > $d->jam_masuk ? 'keterangan-terlambat' : 'keterangan-tepat-waktu' }}">
+                                @if ($d->jam_in > $d->jam_masuk)
                                     Terlambat {{ $jamTerlambat }}
                                 @else
                                     Tepat Waktu

@@ -79,12 +79,16 @@ class PresensiController extends Controller
         $lokasiUser = explode(',', $lokasi);
         $latitudeUser = $lokasiUser[0];
         $longitudeUser = $lokasiUser[1];
+
+        // Cek jam kerja
         $nama_hari = $this->getHari();
         $jam_kerja = DB::table('konfigurasi_jam_kerja')
             ->join('jam_kerja', 'konfigurasi_jam_kerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->where('nik', $nik)
             ->where('hari', $nama_hari)
             ->first();
+
+
         $jarak = $this->distance($latitudeKantor, $longitudeKantor, $latitudeUser, $longitudeUser);
         $radius = round($jarak["meters"]);
 
@@ -115,7 +119,6 @@ class PresensiController extends Controller
             if ($cek > 0) {
                 if ($jam < $jam_kerja->jam_pulang) {
                     echo "error|Maaf Belum Waktunya Melakukan Absensi Pulang|in";
-                    
                 }
                 $data_pulang = [
                     'jam_out' => $jam,
@@ -146,7 +149,8 @@ class PresensiController extends Controller
                         'tgl_presensi' => $tgl_presensi,
                         'jam_in' => $jam,
                         'foto_in' => $fileNameIn, // Menggunakan nama foto_in
-                        'lokasi_in' => $lokasi
+                        'lokasi_in' => $lokasi,
+                        'kode_jam_kerja' => $jam_kerja->kode_jam_kerja
                     ];
                     $simpan = DB::table('presensi')->insert($data);
 
@@ -291,7 +295,8 @@ class PresensiController extends Controller
     {
         $tanggal = $request->tanggal;
         $presensi = DB::table('presensi')
-            ->select('presensi.*', 'nama_lengkap', 'nama_dept')
+            ->select('presensi.*', 'nama_lengkap', 'nama_dept', 'jam_masuk', 'nama_jam_kerja', 'jam_masuk', "jam_pulang")
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
             ->join('departement', 'karyawan.kode_dept', '=', 'departement.kode_dept')
             ->where('tgl_presensi', $tanggal)
@@ -327,9 +332,10 @@ class PresensiController extends Controller
             ->first();
 
         $presensi = DB::table('presensi')
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->where('nik', $nik)
-            ->whereRaw('MONTH(tgl_presensi)="' . $bulan . '"')
-            ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
+            ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
+            ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
             ->orderBy('tgl_presensi')
             ->get();
 
@@ -354,18 +360,21 @@ class PresensiController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
         $rekap = DB::table('presensi')
-            ->selectRaw('presensi.nik, 
-            karyawan.nama_lengkap')
-            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
-            ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
+        ->selectRaw('presensi.nik, karyawan.nama_lengkap, jam_masuk, jam_pulang')
+        ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+        ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+        ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
-            ->groupByRaw('presensi.nik, nama_lengkap');
+            ->groupByRaw('presensi.nik, nama_lengkap, jam_masuk, jam_pulang');
+
         if (isset($_POST['exportExcel'])) {
             $time = date("d-m-Y H:i:s");
             header("Content-type: application/vnd-ms-excel");
             header("Content-Disposition: attachment; filename=Rekap Presensi $time.xls");
         }
+
         // Dynamically add columns for each day of the month
         for ($day = 1; $day <= 31; $day++) {
             $rekap->selectRaw('MAX(CASE WHEN DAY(presensi.tgl_presensi) = ? THEN CONCAT(presensi.jam_in, "-", IFNULL(presensi.jam_out, "00:00:00")) ELSE "" END) AS tgl_' . $day, [$day]);
@@ -374,6 +383,7 @@ class PresensiController extends Controller
         $rekap = $rekap->get();
         return view('presensi.cetakrekap', compact('rekap', 'bulan', 'tahun', 'namaBulan'));
     }
+
 
     public function izinSakit(Request $request)
     {

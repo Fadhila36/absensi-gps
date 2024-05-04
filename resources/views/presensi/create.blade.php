@@ -61,6 +61,7 @@
     <div class="jam-digital">
         <p>{{ date("d-m-Y") }}</p>
         <p id="jam"></p>
+        {{-- <p>{{ $jam_kerja->hari }}</p> --}}
         <p>{{ $jam_kerja->nama_jam_kerja }}</p>
         <p>Mulai : {{ date("H:i", strtotime($jam_kerja->awal_jam_masuk)) }}</p>
         <p>Masuk : {{ date("H:i", strtotime($jam_kerja->jam_masuk)) }}</p>

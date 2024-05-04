@@ -43,7 +43,7 @@
                     <div class="list-menu">
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="{{ url('/editprofile') }}" class="green" style="font-size: 40px;">
+                                <a href="{{ url('/profile/edit') }}" class="green" style="font-size: 40px;">
                                     <ion-icon name="person-sharp"></ion-icon>
                                 </a>
                             </div>

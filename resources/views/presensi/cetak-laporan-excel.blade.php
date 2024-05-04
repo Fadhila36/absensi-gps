@@ -256,15 +256,15 @@
 
                     @foreach ($presensi as $d)
                         @php
-                            $jamTerlambat = selisih('07:00:00', $d->jam_in);
+                            $jamTerlambat = selisih($d->jam_masuk, $d->jam_in);
                         @endphp
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ date('d-m-Y', strtotime($d->tgl_presensi)) }}</td>
                             <td>{{ $d->jam_in }}</td>
                             <td>{{ $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</td>
-                            <td class="{{ $d->jam_in > '07:00' ? 'keterangan-terlambat' : 'keterangan-tepat-waktu' }}">
-                                @if ($d->jam_in > '07:00')
+                            <td class="{{ $d->jam_in > $d->jam_masuk ? 'keterangan-terlambat' : 'keterangan-tepat-waktu' }}">
+                                @if ($d->jam_in > $d->jam_masuk)
                                     Terlambat {{ $jamTerlambat }}
                                 @else
                                     Tepat Waktu

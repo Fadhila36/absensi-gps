@@ -22,6 +22,7 @@
         <td>{{ $d->nik }}</td>
         <td>{{ $d->nama_lengkap }}</td>
         <td>{{ $d->nama_dept }}</td>
+        <td>{{ $d->nama_jam_kerja }} ({{date("H:i", strtotime ($d->jam_masuk)) }} s/d {{date("H:i", strtotime ($d->jam_pulang)) }})</td>
         <td>{{ $d->jam_in }}</td>
         <td>
             <img src="{{ url($foto_in) }}" class="avatar" alt="">
@@ -41,9 +42,9 @@
             @endif
         </td>
         <td>
-            @if ($d->jam_in >= '07:00')
+            @if ($d->jam_in >= $d->jam_masuk)
                 @php
-                    $jamTerlambat = selisih('07:00:00', $d->jam_in);
+                    $jamTerlambat = selisih($d->jam_masuk, $d->jam_in);
                 @endphp
                 <span class="badge bg-danger text-white">Terlambat {{ $jamTerlambat }}</span>
             @else

@@ -59,7 +59,8 @@
                                         <select name="nik" id="nik" class="form-select">
                                             <option value="">Pilih Karyawan</option>
                                             @foreach ($karyawan as $d)
-                                                <option value="{{ $d->nik }}">{{ $d->nik }} - {{ $d->nama_lengkap }}</option>
+                                                <option value="{{ $d->nik }}">{{ $d->nik }} -
+                                                    {{ $d->nama_lengkap }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -116,7 +117,7 @@
                 let tahun = $("#tahun").val();
                 let nik = $("#nik").val();
                 if (bulan == "") {
-                      Swal.fire({
+                    Swal.fire({
                         title: 'Warning',
                         text: 'Bulan harus Dipilih',
                         icon: 'warning',
@@ -126,6 +127,7 @@
                             $("#nik").focus();
                         }
                     });
+                    return false; // Menahan pengiriman form jika bulan tidak dipilih
                 } else if (tahun == "") {
                     Swal.fire({
                         title: 'Warning',
@@ -136,7 +138,8 @@
                         if (result.isConfirmed) {
                             $("#tahun").focus();
                         }
-                    })
+                    });
+                    return false; // Menahan pengiriman form jika tahun tidak dipilih
                 } else if (nik == "") {
                     Swal.fire({
                         title: 'Warning',
@@ -147,11 +150,11 @@
                         if (result.isConfirmed) {
                             $("#nik").focus();
                         }
-                    })
+                    });
+                    return false; // Menahan pengiriman form jika NIK tidak dipilih
                 }
-
-                return false
-            })
-        })
+                return true; // Mengijinkan pengiriman form jika semua validasi berhasil
+            });
+        });
     </script>
 @endpush
