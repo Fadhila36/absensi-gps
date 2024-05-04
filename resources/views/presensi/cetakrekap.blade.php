@@ -129,35 +129,36 @@
                         <td>{{ $d->nik }}</td>
                         <td>{{ $d->nama_lengkap }}</td>
                         <?php 
-                        $totalHadir = 0;
-                        $totalTerlambat = 0;
-                 for ($i = 1; $i <= 31; $i++) {
-                    $tgl = "tgl_" . $i;
-                    
-                    $hadir = explode("-",$d->$tgl);
-                    if(empty($d->$tgl)){
-                        $hadir = ['',''];
-                        $totalHadir += 0;
-                    } else {
-                        $hadir = explode("-",$d->$tgl);
-                        $totalHadir += 1;
-                        if($hadir[0] > $d->jam_masuk){
-                            $totalTerlambat += 1;
-                        }
-                    }
-
-                     ?>
+    $totalHadir = 0;
+    $totalTerlambat = 0;
+    for ($i = 1; $i <= 31; $i++) {
+        $tgl = "tgl_" . $i;
+        
+        $hadir = explode("-", $d->$tgl);
+        if (empty($d->$tgl)) {
+            $hadir = ['', ''];
+            $totalHadir += 0;
+        } else {
+            $hadir = explode("-", $d->$tgl);
+            $totalHadir += 1;
+            // Periksa apakah format jam yang diambil sesuai dengan format yang diharapkan
+            if (strtotime($hadir[0]) > strtotime($d->jam_masuk)) {
+                $totalTerlambat += 1;
+            }
+        }
+?>
                         <td>
-                            <span
-                                style="color:
-                                {{ $hadir[0] > $d->jam_masuk ? 'red' : '' }}">{{ !empty($hadir[0]) ? $hadir[0] : '-' }}</span>
-                            <span
-                                style="color:
-                                {{ $hadir[1] > $d->jam_pulang ? 'red' : '' }}">{{ !empty($hadir[1]) ? $hadir[1] : '-' }}</span>
+                            <span style="color: <?php echo $hadir[0] > $d->jam_masuk ? 'red' : ''; ?>">
+                                <?php echo !empty($hadir[0]) ? $hadir[0] : '-'; ?>
+                            </span>
+                            <span style="color: <?php echo $hadir[1] > $d->jam_pulang ? 'red' : ''; ?>">
+                                <?php echo !empty($hadir[1]) ? $hadir[1] : '-'; ?>
+                            </span>
                         </td>
                         <?php
-                 }
-                ?>
+    }
+?>
+
                         <td>{{ $totalHadir }}</td>
                         <td>{{ $totalTerlambat }}</td>
                     </tr>
