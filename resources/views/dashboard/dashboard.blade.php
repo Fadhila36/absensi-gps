@@ -1,17 +1,18 @@
 @extends('layouts.presensi')
 @section('content')
-<style>
-    .logout{
-        position: absolute;
-        color: white;
-        font-size: 30px;
-        text-decoration: none;
-        right: 8px
-    }
-    .logout:hover{
-        color:white
-    }
-</style>
+    <style>
+        .logout {
+            position: absolute;
+            color: white;
+            font-size: 30px;
+            text-decoration: none;
+            right: 8px
+        }
+
+        .logout:hover {
+            color: white
+        }
+    </style>
     <!-- App Capsule -->
     <div id="appCapsule">
         <div class="section" id="user-section">
@@ -209,7 +210,7 @@
                 </div>
                 <div class="tab-content mt-2" style="margin-bottom:100px;">
                     <div class="tab-pane fade show active" id="home" role="tabpanel">
-                        <ul class="listview image-listview">
+                        {{-- <ul class="listview image-listview">
                             @foreach ($histori_bulan as $bulan)
                                 @php
                                     $path = Storage::url('upload/absensi/' . $bulan->foto_in);
@@ -231,7 +232,78 @@
                                     </div>
                                 </li>
                             @endforeach
-                        </ul>
+                        </ul> --}}
+
+                        <style>
+                            .history-content {
+                                display: flex;
+                            }
+
+                            .data-presensi {
+                                margin-left: 10px;
+                            }
+
+                            .icon-presensi ion-icon {
+                                font-size: 48px;
+                            }
+
+                            .data-presensi h3 {
+                                margin: 0;
+                                line-height: 1.5;
+                            }
+
+                            .data-presensi h4 {
+                                margin: 0;
+                            }
+
+                            .badge-absen {
+                                font-size: 12px;
+                                padding: 4px 8px;
+                                background-color: #dc3545;
+                                color: #fff;
+                                border-radius: 4px;
+                            }
+                        </style>
+
+                        @foreach ($histori_bulan as $d)
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="history-content">
+                                        <div class="icon-presensi">
+                                            <ion-icon name="calendar-outline" role="img"
+                                                class="md hydrated text-success" aria-label="image outline"></ion-icon>
+                                        </div>
+                                        <div class="data-presensi">
+                                            <h3>{{ $d->nama_jam_kerja }}</h3>
+                                            <h4>{{ \Carbon\Carbon::parse($d->tgl_presensi)->translatedFormat('l j F Y') }}
+                                            </h4>
+                                            <span>
+                                                @if ($d->jam_in != null)
+                                                    {{ date('H:i', strtotime($d->jam_in)) }}
+                                                @else
+                                                    <span class="text-danger">Belum Absen</span>
+                                                @endif
+                                            </span>
+                                            <span>
+                                                @if ($d->jam_out != null)
+                                                    -{{ date('H:i', strtotime($d->jam_out)) }}
+                                                @else
+                                                    <span class="text-danger">- Belum Absen</span>
+                                                @endif
+                                            </span>
+                                            <br>
+                                            <span>
+                                                @if (strtotime($d->jam_in) > strtotime($d->jam_masuk))
+                                                    <span class='text-danger'>Telat</span>
+                                                @else
+                                                    <span class='text-success'>Tepat Waktu</span>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel">
                         <ul class="listview image-listview">
