@@ -58,10 +58,10 @@ class PresensiController extends Controller
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
         $jam_kerja = DB::table('konfigurasi_jam_kerja')
-        ->join('jam_kerja', 'konfigurasi_jam_kerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
-        ->where('nik', $nik)
-        ->where('hari', $nama_hari)
-        ->first();
+            ->join('jam_kerja', 'konfigurasi_jam_kerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->where('nik', $nik)
+            ->where('hari', $nama_hari)
+            ->first();
         return view('presensi.create', compact('cek', 'lok_kantor', 'jam_kerja'));
     }
 
@@ -79,7 +79,12 @@ class PresensiController extends Controller
         $lokasiUser = explode(',', $lokasi);
         $latitudeUser = $lokasiUser[0];
         $longitudeUser = $lokasiUser[1];
-
+        $nama_hari = $this->getHari();
+        $jam_kerja = DB::table('konfigurasi_jam_kerja')
+            ->join('jam_kerja', 'konfigurasi_jam_kerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->where('nik', $nik)
+            ->where('hari', $nama_hari)
+            ->first();
         $jarak = $this->distance($latitudeKantor, $longitudeKantor, $latitudeUser, $longitudeUser);
         $radius = round($jarak["meters"]);
 
@@ -107,9 +112,11 @@ class PresensiController extends Controller
         if ($radius > $lok_kantor->radius_cabang) {
             echo "error|Maaf Anda Diluar Jangkauan, Jarak Anda " . $radius . " Meter Dari Kantor|radius";
         } else {
-
-
             if ($cek > 0) {
+                if ($jam < $jam_kerja->jam_pulang) {
+                    echo "error|Maaf Belum Waktunya Melakukan Absensi Pulang|in";
+                    
+                }
                 $data_pulang = [
                     'jam_out' => $jam,
                     'foto_out' => $fileNameOut, // Menggunakan nama foto_out
@@ -129,22 +136,28 @@ class PresensiController extends Controller
                     echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|out";
                 }
             } else {
-                $data = [
-                    'nik' => $nik,
-                    'tgl_presensi' => $tgl_presensi,
-                    'jam_in' => $jam,
-                    'foto_in' => $fileNameIn, // Menggunakan nama foto_in
-                    'lokasi_in' => $lokasi
-                ];
-                $simpan = DB::table('presensi')->insert($data);
-
-                if ($simpan) {
-                    // Berhasil menyimpan data baru
-                    echo "success|Terima Kasih, Selamat Bekerja|in";
-                    Storage::put($fileIn, $image_base64); // Menggunakan nama file foto_in
+                if ($jam < $jam_kerja->awal_jam_masuk) {
+                    echo "error|Maaf Belum Waktunya Melakukan Absensi|in";
+                } else if ($jam > $jam_kerja->akhir_jam_masuk) {
+                    echo "error|Maaf Waktu Untuk Absensi Masuk Telah Lewat|in";
                 } else {
-                    // Gagal menyimpan data baru
-                    echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|in";
+                    $data = [
+                        'nik' => $nik,
+                        'tgl_presensi' => $tgl_presensi,
+                        'jam_in' => $jam,
+                        'foto_in' => $fileNameIn, // Menggunakan nama foto_in
+                        'lokasi_in' => $lokasi
+                    ];
+                    $simpan = DB::table('presensi')->insert($data);
+
+                    if ($simpan) {
+                        // Berhasil menyimpan data baru
+                        echo "success|Terima Kasih, Selamat Bekerja|in";
+                        Storage::put($fileIn, $image_base64); // Menggunakan nama file foto_in
+                    } else {
+                        // Gagal menyimpan data baru
+                        echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|in";
+                    }
                 }
             }
         }
