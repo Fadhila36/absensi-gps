@@ -51,6 +51,7 @@ class PresensiController extends Controller
         $hari_ini = date('Y-m-d');
         $nama_hari = $this->getHari();
         $nik = auth()->guard('karyawan')->user()->nik;
+        $kode_dept = auth()->guard('karyawan')->user()->kode_dept;
         $cek = DB::table('presensi')
             ->where('tgl_presensi', $hari_ini)
             ->where('nik', $nik)
@@ -63,8 +64,17 @@ class PresensiController extends Controller
             ->where('hari', $nama_hari)
             ->first();
 
-        if ($jam_kerja == null)
-        {
+        if ($jam_kerja == null) {
+            $jam_kerja = DB::table('konfigurasi_jk_dept_detail')
+                ->join('konfigurasi_jk_dept', 'konfigurasi_jk_dept_detail.kode_jk_dept', '=', 'konfigurasi_jk_dept.kode_jk_dept')
+                ->join('jam_kerja', 'konfigurasi_jk_dept_detail.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+                ->where('kode_dept', $kode_dept)
+                ->where('kode_cabang', $kode_cabang)
+                ->where('hari', $nama_hari)
+                ->first();
+        }
+
+        if ($jam_kerja == null) {
             return view('presensi.notif-jadwal');
         } else {
             return view('presensi.create', compact('cek', 'lok_kantor', 'jam_kerja'));
@@ -371,10 +381,10 @@ class PresensiController extends Controller
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         $rekap = DB::table('presensi')
-        ->selectRaw('presensi.nik, karyawan.nama_lengkap, jam_masuk, jam_pulang')
-        ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
-        ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
-        ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
+            ->selectRaw('presensi.nik, karyawan.nama_lengkap, jam_masuk, jam_pulang')
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+            ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
             ->groupByRaw('presensi.nik, nama_lengkap, jam_masuk, jam_pulang');
 
