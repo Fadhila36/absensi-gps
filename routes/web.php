@@ -92,7 +92,9 @@ Route::middleware('auth:user')->group(function () {
         Route::get('/set-jam-kerja/{nik}', [KonfigurasiController::class, 'setJamKerja']);
         Route::post('/set-jam-kerja/store', [KonfigurasiController::class, 'storeSetJamKerja']);
         Route::post('/set-jam-kerja/update', [KonfigurasiController::class, 'updateSetJamKerja']);
-        
+        Route::get('/jam-departemen', [KonfigurasiController::class, 'jamDepartemen']);
+        Route::get('/jam-departemen/create', [KonfigurasiController::class, 'createJamDepartemen']);
+        Route::post('/jam-departemen/store', [KonfigurasiController::class, 'storeJamDepartemen']);
     });
 
     Route::prefix('/cabang')->group(function () {

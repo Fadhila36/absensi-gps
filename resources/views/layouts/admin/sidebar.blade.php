@@ -245,7 +245,8 @@
                              Data Master
                          </span>
                      </a>
-                     <div class="dropdown-menu {{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'show' : '' }}">
+                     <div
+                         class="dropdown-menu {{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'show' : '' }}">
                          <div class="dropdown-menu-columns">
                              <div class="dropdown-menu-column">
                                  <a class="dropdown-item {{ request()->is(['karyawan']) ? 'active' : '' }}"
@@ -336,8 +337,7 @@
                              Laporan
                          </span>
                      </a>
-                     <div
-                         class="dropdown-menu {{ request()->is(['presensi', 'presensi/*']) ? 'show' : '' }}">
+                     <div class="dropdown-menu {{ request()->is(['presensi', 'presensi/*']) ? 'show' : '' }}">
                          <div class="dropdown-menu-columns">
                              <div class="dropdown-menu-column">
                                  <a class="dropdown-item {{ request()->is(['presensi/laporan']) ? 'active' : '' }}"
@@ -374,13 +374,20 @@
                              Setting
                          </span>
                      </a>
-                     <div
-                         class="dropdown-menu {{ request()->is('setting/*') || request()->is('setting/*') ? 'show' : '' }}">
+                     <div class="dropdown-menu {{ request()->is('setting/*') || request()->is('setting/*') ? 'show' : '' }}">
                          <div class="dropdown-menu-columns">
                              <div class="dropdown-menu-column">
                                  <a class="dropdown-item {{ request()->is('setting/jam') ? 'active' : '' }}"
                                      href="{{ url('/setting/jam') }}">
                                      Jam Kerja
+                                 </a>
+                             </div>
+                         </div>
+                         <div class="dropdown-menu-columns">
+                             <div class="dropdown-menu-column">
+                                 <a class="dropdown-item {{ request()->is('setting/jam-departemen') ? 'active' : '' }}"
+                                     href="{{ url('/setting/jam-departemen') }}">
+                                     Jam Kerja Departemen
                                  </a>
                              </div>
                          </div>

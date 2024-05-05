@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SetJamKerja;
+use App\Models\SetJamKerjaDept;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -134,7 +135,7 @@ class KonfigurasiController extends Controller
         try {
             SetJamKerja::insert($data);
             return redirect('/karyawan')->with('success', 'Jam kerja baru berhasil ditambahkan!');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return redirect('/karyawan')->with('error', 'Gagal memproses data. Silakan coba lagi.');
         }
     }
@@ -162,6 +163,57 @@ class KonfigurasiController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect('/karyawan')->with('error', 'Gagal memproses data. Silakan coba lagi.');
+        }
+    }
+
+    public function jamDepartemen()
+    {
+        $jam_kerja_dept = DB::table('konfigurasi_jk_dept')
+        ->join('cabang', 'konfigurasi_jk_dept.kode_cabang', '=', 'cabang.kode_cabang')
+        ->join('departement', 'konfigurasi_jk_dept.kode_dept', '=', 'departement.kode_dept')
+        ->get();
+        return view('konfigurasi.jam-departemen.index', compact('jam_kerja_dept'));
+    }
+
+    public function createJamDepartemen()
+    {
+        $jam_kerja = DB::table('jam_kerja')->orderBy('nama_jam_kerja')->get();
+        $cabang = DB::table('cabang')->get();
+        $departemen = DB::table('departement')->get();
+        return view('konfigurasi.jam-departemen.create', compact('jam_kerja', 'cabang', 'departemen'));
+    }
+
+    public function storeJamDepartemen(Request $request)
+    {
+        $kode_cabang = $request->kode_cabang;
+        $kode_dept = $request->kode_dept;
+        $hari = $request->hari;
+        $kode_jam_kerja = $request->kode_jam_kerja;
+        $kode_jk_dept = "J" . $kode_cabang . $kode_dept;
+
+        DB::beginTransaction();
+        try {
+            // Menyimpan data ke konfigurasi_jk_dept
+            DB::table('konfigurasi_jk_dept')->insert([
+                'kode_jk_dept' => $kode_jk_dept,
+                'kode_cabang' => $kode_cabang,
+                'kode_dept' => $kode_dept
+            ]);
+
+            for ($i = 0; $i < count($hari); $i++) {
+                $data[] = [
+                    'kode_jk_dept' => $kode_jk_dept,
+                    'hari' => $hari[$i],
+                    'kode_jam_kerja' => $kode_jam_kerja[$i]
+                ];
+            }
+
+            SetJamKerjaDept::insert($data);
+            DB::commit();
+            return redirect('/setting/jam-departemen')->with('success', 'Jam kerja Departemen baru berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect('/setting/jam-departemen')->with('error', 'Gagal memproses data. Silakan coba lagi.');
         }
     }
 }
