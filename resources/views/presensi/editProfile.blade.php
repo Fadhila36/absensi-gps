@@ -30,6 +30,11 @@
         </div>
     </div>
 
+    @error('foto')
+        <div class="alert alert-danger">
+            <p>{{ $message }}</p>
+        </div>
+    @enderror
     <form action="{{ url('/profile/update/' . $karyawan->nik) }}" method="POST" enctype="multipart/form-data"
         style="margin-top: 4rem">
         @csrf
