@@ -334,6 +334,7 @@
 @push('myscript')
     <script>
         $(function() {
+            $("#awal_jam_masuk, #akhir_jam_masuk, #jam_pulang, #jam_masuk").mask('00:00');
             $('#btnTambahJam').on('click', function() {
                 $('#modal-addJk').modal('show');
             })

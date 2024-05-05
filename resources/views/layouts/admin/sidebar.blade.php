@@ -375,13 +375,9 @@
                          </span>
                      </a>
                      <div
-                         class="dropdown-menu {{ request()->is('setting/lokasi') || request()->is('setting/jam') ? 'show' : '' }}">
+                         class="dropdown-menu {{ request()->is('setting/*') || request()->is('setting/*') ? 'show' : '' }}">
                          <div class="dropdown-menu-columns">
                              <div class="dropdown-menu-column">
-                                 <a class="dropdown-item {{ request()->is('setting/lokasi') ? 'active' : '' }}"
-                                     href="{{ url('/setting/lokasi') }}">
-                                     Lokasi Kantor
-                                 </a>
                                  <a class="dropdown-item {{ request()->is('setting/jam') ? 'active' : '' }}"
                                      href="{{ url('/setting/jam') }}">
                                      Jam Kerja

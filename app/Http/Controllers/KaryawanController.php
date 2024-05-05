@@ -68,8 +68,9 @@ class KaryawanController extends Controller
             // dd($e->getMessage());
             if($e->getCode() == 23000){
                 $message = "NIK sudah terdaftar";
+            } else {
+                return redirect()->back()->with(['error' => 'Data Gagal Disimpan. ' . $message]);
             }
-            return redirect()->back()->with(['error' => 'Data Gagal Disimpan. ' . $message]);
         }
     }
 

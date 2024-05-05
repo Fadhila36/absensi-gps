@@ -237,6 +237,8 @@
                         <style>
                             .history-content {
                                 display: flex;
+                                align-items: flex-start;
+                                /* Mengatur item agar align ke atas */
                             }
 
                             .data-presensi {
@@ -263,6 +265,28 @@
                                 color: #fff;
                                 border-radius: 4px;
                             }
+
+                            #keterangan {
+                                margin-top: 5px;
+                            }
+
+                            #keterangan span {
+                                display: block;
+                            }
+
+                            #keterangan .danger {
+                                color: red;
+                            }
+
+                            #keterangan .success {
+                                color: green;
+                            }
+
+                            /* Tambahan CSS */
+                            #keterangan {
+                                margin-left: 0px;
+                                /* Sesuaikan dengan posisi elemen lain */
+                            }
                         </style>
 
                         @foreach ($histori_bulan as $d)
@@ -283,22 +307,31 @@
                                                 @else
                                                     <span class="text-danger">Belum Absen</span>
                                                 @endif
-                                            </span>
-                                            <span>
+
                                                 @if ($d->jam_out != null)
                                                     -{{ date('H:i', strtotime($d->jam_out)) }}
                                                 @else
-                                                    <span class="text-danger">- Belum Absen</span>
+                                                    - <span class="text-danger">Belum Absen</span>
                                                 @endif
                                             </span>
-                                            <br>
-                                            <span>
-                                                @if (strtotime($d->jam_in) > strtotime($d->jam_masuk))
-                                                    <span class='text-danger'>Telat</span>
+                                            <div id="keterangan">
+                                                @php
+                                                    $jam_in = date('H:i', strtotime($d->jam_in));
+                                                    $jam_masuk = date('H:i', strtotime($d->jam_masuk));
+
+                                                    $jadwal_jam_masuk = $d->tgl_presensi . " " . $d->jam_masuk;
+                                                    $jam_presensi = $d->tgl_presensi." ".$d->jam_in;
+                                                @endphp
+                                                @if ($jam_in > $jam_masuk)
+                                                @php
+                                                  $jml_terlambat =  hitung_jam_terlambat($jadwal_jam_masuk, $jam_presensi);
+                                                  $jml_terlambat_desimal =  hitung_jam_terlambat_desimal($jadwal_jam_masuk, $jam_presensi);
+                                                @endphp
+                                                    <span class="danger">Terlambat {{ $jml_terlambat }} ({{ $jml_terlambat_desimal  }} Jam)</span>
                                                 @else
-                                                    <span class='text-success'>Tepat Waktu</span>
+                                                    <span class="success">Tepat Waktu</span>
                                                 @endif
-                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

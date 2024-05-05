@@ -265,7 +265,7 @@
                                             <path d="M14 12h4" />
                                         </svg>
                                     </span>
-                                    <input type="number" value="" id="nik" class="form-control"
+                                    <input type="text" maxlength="10" value="" id="nik" class="form-control"
                                         name="nik"placeholder="Nik">
                                 </div>
                             </div>
