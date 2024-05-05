@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                    <select name="kode_cabang" id="kode_cabang" class="form-select" required>
                                         <option value="">Pilih Cabang</option>
                                          @foreach ($cabang as $d)
                                             <option value="{{ $d->kode_cabang }}">{{strtoupper($d->nama_cabang) }}</option>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <select name="kode_dept" id="kode_dept" class="form-select">
+                                    <select name="kode_dept" id="kode_dept" class="form-select" required>
                                         <option value="">Pilih Departemen</option>
                                                 @foreach ($departemen as $d)
                                             <option value="{{ $d->kode_dept }}">{{strtoupper($d->nama_dept) }}</option>
@@ -61,7 +61,7 @@
                                         <input type="hidden" name="hari[]" value="Senin">
                                     </td>
                                     <td>
-                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select" required>
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -75,7 +75,7 @@
                                         <input type="hidden" name="hari[]" value="Selasa">
                                     </td>
                                     <td>
-                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select" required>
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -89,7 +89,7 @@
                                         <input type="hidden" name="hari[]" value="Rabu">
                                     </td>
                                     <td>
-                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select" required>
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -103,7 +103,7 @@
                                         <input type="hidden" name="hari[]" value="Kamis">
                                     </td>
                                     <td>
-                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select" required>
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -117,7 +117,7 @@
                                         <input type="hidden" name="hari[]" value="Jumat">
                                     </td>
                                     <td>
-                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select" required>
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}
@@ -131,7 +131,7 @@
                                         <input type="hidden" name="hari[]" value="Sabtu">
                                     </td>
                                     <td>
-                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select" required>
                                             <option value="">Pilih Jam Kerja</option>
                                             @foreach ($jam_kerja as $item)
                                                 <option value="{{ $item->kode_jam_kerja }}">{{ $item->nama_jam_kerja }}

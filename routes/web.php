@@ -95,6 +95,10 @@ Route::middleware('auth:user')->group(function () {
         Route::get('/jam-departemen', [KonfigurasiController::class, 'jamDepartemen']);
         Route::get('/jam-departemen/create', [KonfigurasiController::class, 'createJamDepartemen']);
         Route::post('/jam-departemen/store', [KonfigurasiController::class, 'storeJamDepartemen']);
+        Route::get('/jam-departemen/{kode_jk_dept}/edit', [KonfigurasiController::class, 'editJamDepartemen']);
+        Route::post('/jam-departemen/update/{kode_jk_dept}', [KonfigurasiController::class, 'updateJamDepartemen']);
+        Route::get('/jam-departemen/show/{kode_jk_dept}', [KonfigurasiController::class, 'showJamDepartemen']);
+        Route::get('/jam-departemen/delete/{kode_jk_dept}', [KonfigurasiController::class, 'deleteJamDepartemen']);
     });
 
     Route::prefix('/cabang')->group(function () {
