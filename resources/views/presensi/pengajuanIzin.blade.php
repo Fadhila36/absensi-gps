@@ -29,7 +29,7 @@
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">Form Pengajuan Izin/Sakit</div>
+        <div class="pageTitle">Form Pengajuan Izin</div>
         <div class="right"></div>
     </div>
 @endsection
