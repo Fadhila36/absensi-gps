@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
+use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\PresensiController;
@@ -40,7 +41,7 @@ Route::middleware(['auth:karyawan'])->group(function () {
         Route::get('/histori', [PresensiController::class, 'histori']);
         Route::post('/histori', [PresensiController::class, 'getHistori']);
         Route::get('/izin', [PresensiController::class, 'izin']);
-        Route::get('/izin/create', [PresensiController::class, 'createIzin']);
+        Route::get('/izin/create', [IzinController::class, 'create']);
         Route::post('/izin/store', [PresensiController::class, 'storeIzin']);
         Route::post('/izin/check', [PresensiController::class, 'checkIzin']);
     });

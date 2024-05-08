@@ -67,11 +67,11 @@
                 <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                 <p>Izin Absen</p>
             </a>
-            <a href="#" class="dropdown-item bg-primary">
+            <a href="{{ url('presensi/sakit/create') }}" class="dropdown-item bg-primary">
                 <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                 <p>Sakit</p>
             </a>
-            <a href="#" class="dropdown-item bg-primary">
+            <a href="{{ url('presensi/cuti/create') }}" class="dropdown-item bg-primary">
                 <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                 <p>Cuti</p>
             </a>
