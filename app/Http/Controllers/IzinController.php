@@ -21,7 +21,21 @@ class IzinController extends Controller
         $status = "i";
         $keterangan = $request->keterangan;
 
+        $bulan = date("m", strtotime($tgl_izin_dari));
+        $tahun = date("Y" ,strtotime($tgl_izin_dari));
+        $thn = substr($tahun,2,2);
+        $last_izin = DB::table('pengajuan_izin')
+        ->whereRaw('MONTH(tgl_izin_dari)="' . $bulan . '"')
+        ->whereRaw('YEAR(tgl_izin_dari)="' . $tahun . '"')
+        ->orderBy('kode_izin', 'desc')
+        ->first();
+
+        $last_kode_izin = $last_izin != null ? $last_izin->kode_izin : "";
+        $format = "IZ".$bulan.$thn;
+        $kode_izin = buatkode($last_kode_izin, $format, 3);
+
         $data = [
+            'kode_izin' => $kode_izin,
             'nik' => $nik,
             'tgl_izin_dari' => $tgl_izin_dari,
             'tgl_izin_sampai' => $tgl_izin_sampai,

@@ -21,13 +21,26 @@ class SakitController extends Controller
         $status = "s";
         $keterangan = $request->keterangan;
 
-        $kode_izin = rand();
+
+        $bulan = date("m", strtotime($tgl_izin_dari));
+        $tahun = date("Y", strtotime($tgl_izin_dari));
+        $thn = substr($tahun, 2, 2);
+        $last_izin = DB::table('pengajuan_izin')
+        ->whereRaw('MONTH(tgl_izin_dari)="' . $bulan . '"')
+        ->whereRaw('YEAR(tgl_izin_dari)="' . $tahun . '"')
+        ->orderBy('kode_izin', 'desc')
+        ->first();
+
+        $last_kode_izin = $last_izin != null ? $last_izin->kode_izin : "";
+        $format = "IZ" . $bulan . $thn;
+        $kode_izin = buatkode($last_kode_izin, $format, 3);
         if ($request->hasFile('sid')) {
             $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
         } else {
             $sid = null;
         }
         $data = [
+            'kode_izin' => $kode_izin,
             'nik' => $nik,
             'tgl_izin_dari' => $tgl_izin_dari,
             'tgl_izin_sampai' => $tgl_izin_sampai,
