@@ -8,6 +8,7 @@ use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\SakitController;
 use Illuminate\Support\Facades\Route;
 
 // Guest Routes
@@ -44,6 +45,8 @@ Route::middleware(['auth:karyawan'])->group(function () {
         Route::get('/izin/create', [IzinController::class, 'create']);
         Route::post('/izin/store', [IzinController::class, 'storeIzin']);
         Route::post('/izin/check', [PresensiController::class, 'checkIzin']);
+        Route::get('/sakit/create', [SakitController::class, 'create']);
+        Route::post('/sakit/store', [SakitController::class, 'storeSakit']);
     });
 });
 

@@ -62,7 +62,7 @@
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">Form Pengajuan Izin</div>
+        <div class="pageTitle">Form Pengajuan Sakit</div>
         <div class="right"></div>
     </div>
 @endsection
@@ -70,7 +70,8 @@
     <div class="row justify-content-center" style="margin-top: 70px">
         <div class="col-md-6">
             <div class="form-container">
-                <form action="{{ url('/presensi/izin/store') }}" method="POST" enctype="multipart/form-data" id="formizin">
+                <form action="{{ url('/presensi/sakit/store') }}" method="POST" enctype="multipart/form-data"
+                    id="formizin">
                     @csrf
                     <div class="form-group">
                         <input type="text" id="tgl_izin_dari" name="tgl_izin_dari" class="form-control datepicker"
@@ -81,10 +82,22 @@
                             placeholder="Sampai">
                     </div>
                     <div class="form-group">
-                        <input type="text" id="jml_hari" name="jml_hari" class="form-control"
-                            placeholder="Jumlah hari" readonly>
+                        <input type="text" id="jml_hari" name="jml_hari" class="form-control" placeholder="Jumlah hari"
+                            readonly>
                     </div>
-                    <div class="form-group">
+                    <div class="custom-file-upload" id="fileUpload1" style="height: 100px !important">
+                        <input type="file" name="sid" id="fileuploadInput" accept=".png, .jpg, .jpeg, .pdf">
+                        <label for="fileuploadInput">
+                            <span>
+                                <strong>
+                                    <ion-icon name="cloud-upload-outline" role="img" class="md hydrated"
+                                        aria-label="cloud upload outline"></ion-icon>
+                                    <i>Tap to Upload File/Photo</i>
+                                </strong>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-group mt-2">
                         <textarea name="keterangan" id="keterangan" cols="30" rows="5" class="form-control" placeholder="Keterangan"></textarea>
                     </div>
                     <div class="form-group">

@@ -42,7 +42,7 @@
         }
 
         .status .badge {
-            font-size: 14px;
+            font-size: 12px;
             padding: 5px 10px;
             border-radius: 5px;
         }
@@ -80,23 +80,46 @@
                         $status = 'Not found';
                     }
                 @endphp
-                <div class="card">
+                <div class="card mt-1">
                     <div class="card-body">
                         <div class="history-content">
                             <div class="icon-presensi">
-                                <ion-icon name="document-outline" role="img" class="md hydrated "
+                                @if ($d->status=='i')
+                                     <ion-icon name="document-outline" role="img" class="md hydrated " style="font-size: 48px; color:rgb(21,55,207)"
                                     aria-label="image outline"></ion-icon>
+                                @elseif ($d->status=='s')
+                                    <ion-icon name="medkit-outline" role="img" class="md hydrated " style="font-size: 48px; color:rgb(191,7,65)"
+                                        aria-label="image outline"></ion-icon>
+                                    
+                                @endif
+                               
                             </div>
                             <div class="data-presensi">
                                 <h3>{{ \Carbon\Carbon::parse($d->tgl_izin_dari)->locale(config('app.locale'))->isoFormat('LL') }}
-                                    ({{ $status }})</h3>
+                                    ({{ $status }})
+                                </h3>
                                 <small>{{ \Carbon\Carbon::parse($d->tgl_izin_dari)->locale(config('app.locale'))->isoFormat('LL') }}
                                     s/d
                                     {{ \Carbon\Carbon::parse($d->tgl_izin_sampai)->locale(config('app.locale'))->isoFormat('LL') }}</small>
-                                <p>{{ $d->keterangan }}</p>
+                                <p>
+                                    {{ $d->keterangan }}
+                                <br>
+                                @if (!empty($d->doc_sid))
+                                <span style="color: blue">
+                                    <ion-icon name="document-attach-outline"></ion-icon> Lihat SID
+                                </span>
+                                @endif
+                                </p>
                             </div>
                             <div class="status">
-                                <span class="badge bg-success">{{ $d->status_approved }}</span>
+                                @if ($d->status_approved == 0)
+                                    <span class="badge badge-warning">Menunggu</span>
+                                @elseif($d->status_approved == 1)
+                                    <span class="badge badge-success">Disetujui</span>
+                                @elseif($d->status_approved == 2)
+                                    <span class="badge badge-danger">Ditolak</span>
+                                @endif
+                                <p style="margin-top: 5px; font-weight: bold">{{ hitung_hari($d->tgl_izin_dari, $d->tgl_izin_sampai)}} Hari</p>
                             </div>
                         </div>
                     </div>
@@ -138,12 +161,12 @@
                 <p>Izin Absen</p>
             </a>
             <a href="{{ url('presensi/sakit/create') }}" class="dropdown-item bg-primary">
-                <ion-icon name="document-outline" role="img" class="md hydrated"
+                <ion-icon name="medkit-outline" role="img" class="md hydrated"
                     aria-label="videocam outline"></ion-icon>
                 <p>Sakit</p>
             </a>
             <a href="{{ url('presensi/cuti/create') }}" class="dropdown-item bg-primary">
-                <ion-icon name="document-outline" role="img" class="md hydrated"
+                <ion-icon name="calendar-clear-outline" role="img" class="md hydrated"
                     aria-label="videocam outline"></ion-icon>
                 <p>Cuti</p>
             </a>
