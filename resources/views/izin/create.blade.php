@@ -47,8 +47,8 @@
                         placeholder="Sampai">
                 </div>
                 <div class="form-group">
-                    <input type="text" id="jml_hari" name="jml_hari" class="form-control datepicker"
-                        placeholder="Jumlah hari" disabled>
+                    <input type="text" id="jml_hari" name="jml_hari" class="form-control"
+                        placeholder="Jumlah hari" readonly>
                 </div>
                 <div class="form-group">
                     <textarea name="keterangan" id="keterangan" cols="30" rows="5" class="form-control" placeholder="Keterangan"></textarea>

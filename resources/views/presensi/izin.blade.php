@@ -9,6 +9,44 @@
         <div class="pageTitle">Data Izin / Sakit</div>
         <div class="right"></div>
     </div>
+
+    <style>
+        .history-content {
+            display: flex;
+            align-items: flex-start;
+            /* Mengatur item agar align ke atas */
+        }
+
+        .icon-presensi ion-icon {
+            font-size: 48px;
+            color: rgb(21, 95, 207);
+        }
+
+        .data-presensi {
+            margin-left: 10px;
+        }
+
+        .data-presensi h3 {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .data-presensi h4 {
+            margin: 0;
+        }
+
+        /* Menambahkan gaya untuk status */
+        .status {
+            margin-left: auto;
+            /* Agar status muncul di sebelah kanan */
+        }
+
+        .status .badge {
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="row" style="margin-top: 70px">
@@ -30,13 +68,45 @@
     </div>
     <div class="row">
         <div class="col">
-            @foreach ($dataIzin as $di)
-                <ul class="listview image-listview">
+            @foreach ($dataIzin as $d)
+                @php
+                    if ($d->status == 'i') {
+                        $status = 'Izin';
+                    } elseif ($d->status == 's') {
+                        $status = 'Sakit';
+                    } elseif ($d->status == 'c') {
+                        $status = 'Cuti';
+                    } else {
+                        $status = 'Not found';
+                    }
+                @endphp
+                <div class="card">
+                    <div class="card-body">
+                        <div class="history-content">
+                            <div class="icon-presensi">
+                                <ion-icon name="document-outline" role="img" class="md hydrated "
+                                    aria-label="image outline"></ion-icon>
+                            </div>
+                            <div class="data-presensi">
+                                <h3>{{ \Carbon\Carbon::parse($d->tgl_izin_dari)->locale(config('app.locale'))->isoFormat('LL') }}
+                                    ({{ $status }})</h3>
+                                <small>{{ \Carbon\Carbon::parse($d->tgl_izin_dari)->locale(config('app.locale'))->isoFormat('LL') }}
+                                    s/d
+                                    {{ \Carbon\Carbon::parse($d->tgl_izin_sampai)->locale(config('app.locale'))->isoFormat('LL') }}</small>
+                                <p>{{ $d->keterangan }}</p>
+                            </div>
+                            <div class="status">
+                                <span class="badge bg-success">{{ $d->status_approved }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- <ul class="listview image-listview">
                     <li>
                         <div class="item">
                             <div class="in">
                                 <div>
-                                    <b>{{ date('d-m-Y', strtotime($di->tgl_izin)) }}
+                                    <b>{{ date('d-m-Y', strtotime($di->tgl_izin_dari)) }}
                                         ({{ $di->status == 's' ? 'Sakit' : 'Izin' }})
                                     </b><br>
                                     <small class="text-muted">{{ $di->keterangan }}</small>
@@ -51,7 +121,7 @@
                             </div>
                         </div>
                     </li>
-                </ul>
+                </ul> --}}
             @endforeach
         </div>
     </div>
@@ -68,11 +138,13 @@
                 <p>Izin Absen</p>
             </a>
             <a href="{{ url('presensi/sakit/create') }}" class="dropdown-item bg-primary">
-                <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                <ion-icon name="document-outline" role="img" class="md hydrated"
+                    aria-label="videocam outline"></ion-icon>
                 <p>Sakit</p>
             </a>
             <a href="{{ url('presensi/cuti/create') }}" class="dropdown-item bg-primary">
-                <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                <ion-icon name="document-outline" role="img" class="md hydrated"
+                    aria-label="videocam outline"></ion-icon>
                 <p>Cuti</p>
             </a>
         </div>

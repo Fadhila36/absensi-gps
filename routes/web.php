@@ -42,7 +42,7 @@ Route::middleware(['auth:karyawan'])->group(function () {
         Route::post('/histori', [PresensiController::class, 'getHistori']);
         Route::get('/izin', [PresensiController::class, 'izin']);
         Route::get('/izin/create', [IzinController::class, 'create']);
-        Route::post('/izin/store', [PresensiController::class, 'storeIzin']);
+        Route::post('/izin/store', [IzinController::class, 'storeIzin']);
         Route::post('/izin/check', [PresensiController::class, 'checkIzin']);
     });
 });

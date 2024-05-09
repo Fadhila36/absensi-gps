@@ -40,8 +40,8 @@ class DashboardController extends Controller
             ->selectRaw('SUM((IF(status="i",1,0))) as jmlIzin')
             ->selectRaw('SUM((IF(status="s",1,0))) as jmlSakit')
             ->where('nik', $nik)
-            ->whereRaw('MONTH(tgl_izin)="' . $bulan_ini . '"')
-            ->whereRaw('YEAR(tgl_izin)="' . $tahun_ini . '"')
+            ->whereRaw('MONTH(tgl_izin_dari)="' . $bulan_ini . '"')
+            ->whereRaw('YEAR(tgl_izin_dari)="' . $tahun_ini . '"')
             ->where('status_approved', 1)
             ->first();
         return view('dashboard.dashboard', compact('presensi_hari_ini', 'histori_bulan', 'namaBulan', 'bulan_ini', 'tahun_ini', 'rekapPresensi', 'leaderboard', 'dataIzin'));
@@ -59,7 +59,7 @@ class DashboardController extends Controller
         $dataIzin = DB::table('pengajuan_izin')
             ->selectRaw('SUM((IF(status="i",1,0))) as jmlIzin')
             ->selectRaw('SUM((IF(status="s",1,0))) as jmlSakit')
-            ->where('tgl_izin', $hariIni)
+            ->where('tgl_izin_dari', $hariIni)
             ->where('status_approved', 1)
             ->first();
         return view('dashboard.dashboard-admin', compact('rekapPresensi', 'dataIzin'));

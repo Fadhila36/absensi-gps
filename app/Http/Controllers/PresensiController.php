@@ -169,7 +169,6 @@ class PresensiController extends Controller
                         'kode_jam_kerja' => $jam_kerja->kode_jam_kerja
                     ];
                     $simpan = DB::table('presensi')->insert($data);
-
                     if ($simpan) {
                         // Berhasil menyimpan data baru
                         echo "success|Terima Kasih, Selamat Bekerja|in";
