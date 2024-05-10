@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\IzinController;
@@ -111,5 +112,9 @@ Route::middleware('auth:user')->group(function () {
         Route::post('/edit', [CabangController::class, 'edit']);
         Route::post('/update/{kode_cabang}', [CabangController::class, 'update']);
         Route::post('/delete/{kode_cabang}', [CabangController::class, 'delete']);
+    });
+
+    Route::prefix('/cuti')->group(function () {
+        Route::get('/', [CutiController::class, 'index']);
     });
 });

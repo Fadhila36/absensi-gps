@@ -246,7 +246,7 @@
                          </span>
                      </a>
                      <div
-                         class="dropdown-menu {{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'show' : '' }}">
+                         class="dropdown-menu {{ request()->is(['karyawan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}">
                          <div class="dropdown-menu-columns">
                              <div class="dropdown-menu-column">
                                  <a class="dropdown-item {{ request()->is(['karyawan']) ? 'active' : '' }}"
@@ -264,6 +264,12 @@
                                  <a class="dropdown-item {{ request()->is(['cabang']) ? 'active' : '' }}"
                                      href="{{ url('cabang') }}">
                                      Kantor Cabang
+                                 </a>
+                             </div>
+                             <div class="dropdown-menu-column">
+                                 <a class="dropdown-item {{ request()->is(['cuti']) ? 'active' : '' }}"
+                                     href="{{ url('cuti') }}">
+                                     Cuti
                                  </a>
                              </div>
                          </div>
