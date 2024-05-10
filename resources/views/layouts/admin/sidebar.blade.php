@@ -225,7 +225,7 @@
                      </a>
                  </li>
                  <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle {{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'show' : '' }}"
+                     <a class="nav-link dropdown-toggle {{ request()->is(['karyawan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}"
                          href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                          aria-expanded="{{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'true' : 'false' }}">
                          <span

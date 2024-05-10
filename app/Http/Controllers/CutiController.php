@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CutiController extends Controller
@@ -66,6 +67,56 @@ class CutiController extends Controller
             return redirect()->back()->with('success', 'Data Cuti Berhasil Di Hapus');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Data Cuti Gagal Di Hapus');
+        }
+    }
+
+
+    // USER
+
+    public function createCuti()
+    {
+        $master_cuti = DB::table('master_cuti')->orderBy('kode_cuti')->get();
+        return view('cuti.user.create', compact('master_cuti'));
+    }
+
+    public function storeCuti(Request $request)
+    {
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $tgl_izin_dari = $request->tgl_izin_dari;
+        $tgl_izin_sampai = $request->tgl_izin_sampai;
+        $kode_cuti = $request->kode_cuti;
+        $status = "c";
+        $keterangan = $request->keterangan;
+
+        $bulan = date("m", strtotime($tgl_izin_dari));
+        $tahun = date("Y", strtotime($tgl_izin_dari));
+        $thn = substr($tahun, 2, 2);
+        $last_izin = DB::table('pengajuan_izin')
+        ->whereRaw('MONTH(tgl_izin_dari)="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_izin_dari)="' . $tahun . '"')
+            ->orderBy('kode_izin', 'desc')
+            ->first();
+
+        $last_kode_izin = $last_izin != null ? $last_izin->kode_izin : "";
+        $format = "IZ" . $bulan . $thn;
+        $kode_izin = buatkode($last_kode_izin, $format, 3);
+
+        $data = [
+            'kode_izin' => $kode_izin,
+            'nik' => $nik,
+            'tgl_izin_dari' => $tgl_izin_dari,
+            'tgl_izin_sampai' => $tgl_izin_sampai,
+            'kode_cuti' => $kode_cuti,
+            'status' => $status,
+            'keterangan' => $keterangan
+        ];
+
+        $simpan = DB::table('pengajuan_izin')->insert($data);
+
+        if ($simpan) {
+            return redirect('/presensi/izin')->with('success', 'Data Berhasil Diinput');
+        } else {
+            return redirect('/presensi/izin')->with('error', 'Data Gagal Diinput');
         }
     }
 }

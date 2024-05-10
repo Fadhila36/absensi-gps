@@ -48,6 +48,8 @@ Route::middleware(['auth:karyawan'])->group(function () {
         Route::post('/izin/check', [PresensiController::class, 'checkIzin']);
         Route::get('/sakit/create', [SakitController::class, 'create']);
         Route::post('/sakit/store', [SakitController::class, 'storeSakit']);
+        Route::get('/cuti/create', [CutiController::class, 'createCuti']);
+        Route::post('/cuti/store', [CutiController::class, 'storeCuti']);
     });
 });
 
