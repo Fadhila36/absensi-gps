@@ -68,7 +68,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <a href="#" class="btn btn-primary" id="btnTambahDepartemen">
+                                    <a href="#" class="btn btn-primary" id="btnTambahCuti">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -95,13 +95,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           @foreach ($cuti as $d)
-                                               <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $d->kode_cuti }}</td>
-                                                <td>{{ $d->nama_cuti }}</td>
-                                                <td>{{ $d->jml_hari }} Hari</td>
-                                                <td>
+                                            @foreach ($cuti as $d)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $d->kode_cuti }}</td>
+                                                    <td>{{ $d->nama_cuti }}</td>
+                                                    <td>{{ $d->jml_hari }} Hari</td>
+                                                    <td>
                                                         <div class="btn-group">
                                                             <a href="#" class="edit btn btn-info btn-sm"
                                                                 kode_cuti="{{ $d->kode_cuti }}">
@@ -110,8 +110,7 @@
                                                                     stroke="currentColor" stroke-width="2"
                                                                     stroke-linecap="round" stroke-linejoin="round"
                                                                     class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                                                    <path stroke="none" d="M0 0h24v24H0z"
-                                                                        fill="none" />
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                     <path
                                                                         d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
                                                                     <path
@@ -119,8 +118,7 @@
                                                                     <path d="M16 5l3 3" />
                                                                 </svg>
                                                             </a>
-                                                            <form
-                                                                action="{{ url('/cuti/delete/' . $d->kode_cuti) }}"
+                                                            <form action="{{ url('/cuti/delete/' . $d->kode_cuti) }}"
                                                                 method="POST" style="margin-left: 5px">
                                                                 @csrf
                                                                 <a class="btn btn-danger btn-sm delete-confirm">
@@ -142,8 +140,8 @@
                                                             </form>
                                                         </div>
                                                     </td>
-                                               </tr>
-                                           @endforeach
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -264,5 +262,93 @@
 @endsection
 
 @push('myscript')
-   
+    <script>
+        $(function() {
+            $('#btnTambahCuti').on('click', function() {
+                $('#modal-addCuti').modal('show');
+            })
+            $('.edit').on('click', function() {
+                let kode_cuti = $(this).attr('kode_cuti');
+                $.ajax({
+                    type: "POST",
+                    url: "/cuti/edit",
+                    cache: false,
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        kode_cuti: kode_cuti
+                    },
+                    success: function(respond) {
+                        $('#loadEditForm').html(respond);
+                    }
+                })
+                $('#modal-editCuti').modal('show');
+            })
+
+            $('.delete-confirm').on('click', function(e) {
+                let form = $(this).closest('form');
+                e.preventDefault();
+                Swal.fire({
+                    title: "Apakan anda yakin?",
+                    text: "Data yang di hapus tidak dapat dikembalikan!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Ya, hapus!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Data anda telah di hapus.",
+                            icon: "success"
+                        });
+                    }
+                });
+            })
+            $('#form-addCuti').on('submit', function(e) {
+                let kode_cuti = $("#kode_cuti").val();
+                let nama_cuti = $("#nama_cuti").val();
+                let jml_hari = $("#jml_hari").val(); // Anda perlu mendapatkan nilai jml_hari
+                if (kode_cuti == "") {
+                    // alert('kode_cuti harus diisi');
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Kode Cuti harus diisi',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#kode_cuti").focus();
+                        }
+                    });
+                    return false;
+                } else if (nama_cuti == "") {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Nama Cuti harus diisi',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#nama_cuti").focus();
+                        }
+                    });
+                    return false;
+                } else if (jml_hari == "" || jml_hari == 0) {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Jumlah Hari harus diisi',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $("#jml_hari").focus();
+                        }
+                    });
+                    return false;
+                }
+            });
+        });
+    </script>
 @endpush

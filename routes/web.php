@@ -116,5 +116,9 @@ Route::middleware('auth:user')->group(function () {
 
     Route::prefix('/cuti')->group(function () {
         Route::get('/', [CutiController::class, 'index']);
+        Route::post('/store', [CutiController::class, 'store']);
+        Route::post('/edit', [CutiController::class, 'edit']);
+        Route::post('/update/{kode_cuti}', [CutiController::class, 'update']);
+        Route::post('/delete/{kode_cuti}', [CutiController::class, 'delete']);
     });
 });
